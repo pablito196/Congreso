@@ -44,10 +44,13 @@ CREATE TABLE IF NOT EXISTS `eventoparticipante` (
   `IdEventoParticipante` int(11) NOT NULL AUTO_INCREMENT,
   `IdEvento` int(11) DEFAULT NULL,
   `IdParticipante` int(11) DEFAULT NULL,
+  `IdMonitor` int(11) DEFAULT NULL,
   `FechaRegistro` datetime DEFAULT NULL,
   PRIMARY KEY (`IdEventoParticipante`),
   KEY `IdEvento` (`IdEvento`),
   KEY `IdParticipante` (`IdParticipante`),
+  KEY `IdMonitor` (`IdMonitor`),
+  CONSTRAINT `eventoparticipante_monitor_fk` FOREIGN KEY (`IdMonitor`) REFERENCES `monitor` (`IdMonitor`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `eventoparticipante_evento_fk` FOREIGN KEY (`IdEvento`) REFERENCES `evento` (`IdEvento`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `eventoparticipante_participante_fk` FOREIGN KEY (`IdParticipante`) REFERENCES `participante` (`IdParticipante`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -157,10 +160,7 @@ CREATE TABLE IF NOT EXISTS `participante` (
   `Institucion` varchar(500) DEFAULT NULL,
   `NumeroHabitacion` varchar(10) DEFAULT NULL,
   `Observaciones` varchar(1000) DEFAULT NULL,
-  `IdMonitor` int(11) DEFAULT NULL,
-  PRIMARY KEY (`IdParticipante`),
-  KEY `IdMonitor` (`IdMonitor`),
-  CONSTRAINT `participante_monitor_fk` FOREIGN KEY (`IdMonitor`) REFERENCES `monitor` (`IdMonitor`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`IdParticipante`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla congreso.participante: ~0 rows (aproximadamente)
