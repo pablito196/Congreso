@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./../plantilla/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h2>Registro de eventos</h2>
+                <h:form id="formRegistroEvento">
+                    <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
+                    <p:panelGrid id="pnlEvento" columns="2" class="panelGrid">
+                        <p:outputLabel value="Nombre del Evento:"/>
+                        <p:inputText value="#{eventoBean.evento.nombreEvento}" required="true" class="cajaTexto"/>
+                        <p:outputLabel value="Lugar:" /> 
+                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
+                        <p:outputLabel for="cdFecha" value="Fecha:" />
+                        <p:calendar id="cdFecha" value="#{eventoBean.evento.fecha}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
+                        <p:outputLabel value="Costo:" /> 
+                        <p:inputText value="#{eventoBean.evento.costo}" />
+                        <p:outputLabel value="Descripción:" /> 
+                        <p:inputTextarea value="#{eventoBean.evento.descripcion}" rows="5" cols="88" maxlength="100" autoResize="false" class="cajaTexto" />
+                    </p:panelGrid>
+                    <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroEvento"/>
+                    <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroEvento"/>
+                    <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroEvento"/>
+                </h:form>    
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

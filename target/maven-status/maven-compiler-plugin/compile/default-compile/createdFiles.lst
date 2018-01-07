@@ -1,0 +1,7 @@
+Modelo\Evento.class
+Bean\EventoBean.class
+Contratos\ParticipanteContrato.class
+Modelo\Participante.class
+Conexion\Parametros.class
+Contratos\EventoContrato.class
+Conexion\Conexion.class
