@@ -52,8 +52,8 @@
                                     <p:selectBooleanCheckbox value="#{_evento.seleccionado}" />
                                 </p:column>
                                 <p:column headerText="Seleccionar">
-                                    <p:commandButton value="" icon="ui-icon-pencil" oncomplete="PF('dialogModificarCategoria').show();" update="formModificarCategoria" class="botonModificar">
-                                        <f:setPropertyActionListener target="#{categoriaBean.categoria}" value="#{cat}"/>
+                                    <p:commandButton value="" icon="ui-icon-pencil" actionListener="#{eventoBean.seleccionarEvento()}" update=":formRegistroEvento:tblEventos" class="botonModificar">
+                                        <f:setPropertyActionListener target="#{eventoBean.evento}" value="#{_evento}" />
                                     </p:commandButton>
                                 </p:column>
                                 <p:column headerText="Modificar">
@@ -67,18 +67,32 @@
 
                 </h:form>
                 <h:form id="formModificarCategoria">
-                    
+
                     <p:dialog id="dlModificarCategoria" widgetVar="dialogModificarCategoria" resizable="false" showEffect="explode" 
                               hideEffect="explode" modal="true" >
                         <h2>Modificar categoría</h2>
                         <p:panelGrid columns="2" class="panelGrid">
-                                <p:outputLabel for="txtDescripcion" value="Descripción:"/>
-                                <p:inputText id="txtDescripcion" value="#{categoriaBean.categoria.descripción}" class="cajaTexto" required="true"/>
+                            <p:outputLabel for="txtDescripcion" value="Descripción:"/>
+                            <p:inputText id="txtDescripcion" value="#{categoriaBean.categoria.descripción}" class="cajaTexto" required="true"/>
 
-                            </p:panelGrid>   
+                        </p:panelGrid>   
                         <p:commandButton value="Guardar" actionListener="#{categoriaBean.actualizarCategoria()}" update="formRegistroEvento:tblEventos" 
+                                         oncomplete="PF('dialogModificarCategoria').hide()" />
+                        <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('dialogModificarCategoria').hide();" />
+                    </p:dialog>
+                </h:form>
+                <h:form id="formAceptarSeleccionar">
+
+                    <p:dialog id="dlAceptarSeleccionar" widgetVar="dialogAceptarSeleccionar" resizable="false" showEffect="explode" 
+                              hideEffect="explode" modal="true" >
+                        <h2>¿Esta seguro de seleccionar este evento como principal?</h2>
+                        <p:panelGrid columns="2" class="panelGrid">
+                            <p:commandButton value="Guardar" actionListener="#{categoriaBean.actualizarCategoria()}" update="formRegistroEvento:tblEventos" 
                                              oncomplete="PF('dialogModificarCategoria').hide()" />
                             <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('dialogModificarCategoria').hide();" />
+
+                        </p:panelGrid>   
+
                     </p:dialog>
                 </h:form>
             </ui:define>

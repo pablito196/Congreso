@@ -80,4 +80,11 @@ public class EventoBean implements Serializable{
     {
         evento = new Evento();
     }
+    
+    public void seleccionarEvento()
+    {
+        EventoContrato eventoContrato = new Evento();
+        eventoContrato.Seleccionar(evento);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Evento seleccionado"));
+    }
 }

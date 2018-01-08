@@ -139,5 +139,12 @@ public class Evento implements EventoContrato{
     public Evento BuscarEvento(Evento evento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public void Seleccionar(Evento evento) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEvento",evento.idEvento));
+        con.Ejecutar("PaInsertarEvento", parametros);
+    }
     
 }
