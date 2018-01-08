@@ -32,6 +32,8 @@ public class EventoBean implements Serializable{
     }
 
     public List<Evento> getListaEventos() {
+        EventoContrato eventoContrato = new Evento();
+        listaEventos = eventoContrato.ListarEventos();
         return listaEventos;
     }
 

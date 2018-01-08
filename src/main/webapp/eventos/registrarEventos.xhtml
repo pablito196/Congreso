@@ -3,32 +3,84 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <body>
 
         <ui:composition template="./../plantilla/plantilla.xhtml">
 
             <ui:define name="content">
-                <h2>Registro de eventos</h2>
-                <h:form id="formRegistroEvento">
+                <h:form id="formRegistroEvento" >
                     <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
-                    <p:panelGrid id="pnlEvento" columns="2" class="panelGrid">
-                        <p:outputLabel value="Nombre del Evento:"/>
-                        <p:inputText value="#{eventoBean.evento.nombreEvento}" required="true" class="cajaTexto"/>
-                        <p:outputLabel value="Lugar:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel for="cdFecha" value="Fecha:" />
-                        <p:calendar id="cdFecha" value="#{eventoBean.evento.fecha}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
-                        <p:outputLabel value="Costo:" /> 
-                        <p:inputText value="#{eventoBean.evento.costo}" />
-                        <p:outputLabel value="Descripción:" /> 
-                        <p:inputTextarea value="#{eventoBean.evento.descripcion}" rows="5" cols="88" maxlength="100" autoResize="false" class="cajaTexto" />
-                    </p:panelGrid>
-                    <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroEvento"/>
-                    <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroEvento"/>
-                    <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroEvento"/>
-                </h:form>    
+                    <p:layout styleClass="layout" >
+                        <p:layoutUnit position="center" resizable="true"  styleClass="layoutUnitCentro"  size="300">
+
+                            <h2>Registro de eventos</h2>
+                            <h:panelGrid id="gridDatosEventos"  columns="2">
+                                <p:outputLabel value="Nombre del Evento:"/>
+                                <p:inputText value="#{eventoBean.evento.nombreEvento}" required="true" class="cajaTexto"/>
+                                <p:outputLabel value="Lugar:" /> 
+                                <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
+                                <p:outputLabel for="cdFechaInicio" value="Fecha de inicio:" />
+                                <p:calendar id="cdFechaInicio" value="#{eventoBean.evento.fechaInicio}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
+                                <p:outputLabel for="cdFechaFin" value="Fecha de finalización:" />
+                                <p:calendar id="cdFechaFin" value="#{eventoBean.evento.fechaFin}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
+                                <p:outputLabel value="Costo:" /> 
+                                <p:inputText value="#{eventoBean.evento.costo}" />
+                                <p:outputLabel value="Descripción:" /> 
+                                <p:inputTextarea value="#{eventoBean.evento.descripcion}" rows="5" cols="88" maxlength="100" autoResize="false" class="cajaTexto" />
+
+                            </h:panelGrid>
+                            <h:panelGrid  columns="3">
+                                <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroEvento"/>
+                                <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroEvento :formRegistroEvento:tblEventos"/>
+                                <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroEvento"/>
+                            </h:panelGrid>
+
+                        </p:layoutUnit>
+                        <p:layoutUnit  position="east" styleClass="layoutUnitEste" size="450">
+
+                            <h2>Lista de Eventos</h2>
+                            <p:dataTable id="tblEventos" 
+                                         var="_evento" value="#{eventoBean.listaEventos}" emptyMessage="No hay datos de eventos" rows="15">
+
+                                <p:column headerText="Nombre del evento">
+                                    <h:outputText value="#{_evento.nombreEvento}" />
+                                </p:column>
+                                <p:column headerText="Seleccionado?">
+                                    <p:selectBooleanCheckbox value="#{_evento.seleccionado}" />
+                                </p:column>
+                                <p:column headerText="Seleccionar">
+                                    <p:commandButton value="" icon="ui-icon-pencil" oncomplete="PF('dialogModificarCategoria').show();" update="formModificarCategoria" class="botonModificar">
+                                        <f:setPropertyActionListener target="#{categoriaBean.categoria}" value="#{cat}"/>
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column headerText="Modificar">
+                                    <p:commandButton value="" icon="ui-icon-pencil" oncomplete="PF('dialogModificarCategoria').show();" update="formModificarCategoria" class="botonModificar">
+                                        <f:setPropertyActionListener target="#{categoriaBean.categoria}" value="#{cat}"/>
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:layoutUnit>
+                    </p:layout>
+
+                </h:form>
+                <h:form id="formModificarCategoria">
+                    
+                    <p:dialog id="dlModificarCategoria" widgetVar="dialogModificarCategoria" resizable="false" showEffect="explode" 
+                              hideEffect="explode" modal="true" >
+                        <h2>Modificar categoría</h2>
+                        <p:panelGrid columns="2" class="panelGrid">
+                                <p:outputLabel for="txtDescripcion" value="Descripción:"/>
+                                <p:inputText id="txtDescripcion" value="#{categoriaBean.categoria.descripción}" class="cajaTexto" required="true"/>
+
+                            </p:panelGrid>   
+                        <p:commandButton value="Guardar" actionListener="#{categoriaBean.actualizarCategoria()}" update="formRegistroEvento:tblEventos" 
+                                             oncomplete="PF('dialogModificarCategoria').hide()" />
+                            <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('dialogModificarCategoria').hide();" />
+                    </p:dialog>
+                </h:form>
             </ui:define>
 
         </ui:composition>

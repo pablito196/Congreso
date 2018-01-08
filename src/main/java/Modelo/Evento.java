@@ -14,9 +14,11 @@ public class Evento implements EventoContrato{
     private int idEvento;
     private String nombreEvento;
     private String lugar;
-    private Date fecha;
+    private Date fechaInicio;
+    private Date fechaFin;
     private BigDecimal costo;
     private String descripcion;
+    private boolean seleccionado;
     
     private final Conexion con = new Conexion();
     private List<Parametros> parametros;
@@ -24,12 +26,15 @@ public class Evento implements EventoContrato{
     public Evento() {
     }
 
-    public Evento(int idEvento, String lugar, Date fecha, BigDecimal costo, String descripcion) {
+    public Evento(int idEvento, String nombreEvento, String lugar, Date fechaInicio , Date fechaFin, BigDecimal costo, String descripcion, boolean seleccionado) {
         this.idEvento = idEvento;
+        this.nombreEvento = nombreEvento;
         this.lugar = lugar;
-        this.fecha = fecha;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
         this.costo = costo;
         this.descripcion = descripcion;
+        this.seleccionado = seleccionado;
     }
 
     public int getIdEvento() {
@@ -56,12 +61,20 @@ public class Evento implements EventoContrato{
         this.lugar = lugar;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Date getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public BigDecimal getCosto() {
@@ -79,15 +92,22 @@ public class Evento implements EventoContrato{
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
-    
-    
+
+    public boolean isSeleccionado() {
+        return seleccionado;
+    }
+
+    public void setSeleccionado(boolean seleccionado) {
+        this.seleccionado = seleccionado;
+    }
     
     @Override
     public void GuardarEvento(Evento evento) {
         parametros = new ArrayList<>();
         parametros.add(new Parametros("_NombreEvento",evento.nombreEvento));
         parametros.add(new Parametros("_Lugar",evento.lugar));
-        parametros.add(new Parametros("_Fecha",evento.fecha));
+        parametros.add(new Parametros("_FechaInicio",evento.fechaInicio));
+        parametros.add(new Parametros("_FechaFin",evento.fechaFin));
         parametros.add(new Parametros("_Costo",evento.costo));
         parametros.add(new Parametros("_Descripcion",evento.descripcion));
         con.Ejecutar("PaInsertarEvento", parametros);
@@ -102,7 +122,9 @@ public class Evento implements EventoContrato{
         {
             while(listadoEventos.next())
             {
-                listaEventos.add(new Evento(listadoEventos.getInt("IdEvento"), listadoEventos.getString("Lugar"), listadoEventos.getDate("Fecha"), listadoEventos.getBigDecimal("Costo"), listadoEventos.getString("Descripcion")));
+                listaEventos.add(new Evento(listadoEventos.getInt("IdEvento"), listadoEventos.getString("NombreEvento"), listadoEventos.getString("Lugar"), 
+                                            listadoEventos.getDate("FechaInicio") , listadoEventos.getDate("FechaFin"), listadoEventos.getBigDecimal("Costo"), 
+                                            listadoEventos.getString("Descripcion"), listadoEventos.getBoolean("Seleccionado")));
             }
             
         }
