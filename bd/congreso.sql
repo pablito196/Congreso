@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         5.5.27-log - MySQL Community Server (GPL)
+-- Versión del servidor:         5.5.27 - MySQL Community Server (GPL)
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             9.4.0.5142
 -- --------------------------------------------------------
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `evento` (
 DELETE FROM `evento`;
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
 INSERT INTO `evento` (`IdEvento`, `NombreEvento`, `Lugar`, `FechaInicio`, `FechaFin`, `Costo`, `Descripcion`, `Seleccionado`) VALUES
-	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', NULL, 100.00, 'Primer Congreso', NULL);
+	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-30 00:00:00', 100.00, 'Primer Congreso', b'0');
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
 
 -- Volcando estructura para tabla congreso.eventoparticipante
@@ -60,6 +60,20 @@ DELETE FROM `eventoparticipante`;
 /*!40000 ALTER TABLE `eventoparticipante` DISABLE KEYS */;
 /*!40000 ALTER TABLE `eventoparticipante` ENABLE KEYS */;
 
+-- Volcando estructura para vista congreso.listaeventos
+DROP VIEW IF EXISTS `listaeventos`;
+-- Creando tabla temporal para superar errores de dependencia de VIEW
+CREATE TABLE `listaeventos` (
+	`IdEvento` INT(11) NOT NULL,
+	`NombreEvento` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`Lugar` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`FechaInicio` DATETIME NULL,
+	`FechaFin` DATETIME NULL,
+	`Costo` DECIMAL(11,2) NULL,
+	`Descripcion` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`Seleccionado` BIT(1) NULL
+) ENGINE=MyISAM;
+
 -- Volcando estructura para tabla congreso.monitor
 DROP TABLE IF EXISTS `monitor`;
 CREATE TABLE IF NOT EXISTS `monitor` (
@@ -70,11 +84,14 @@ CREATE TABLE IF NOT EXISTS `monitor` (
   `Direccion` varchar(300) DEFAULT NULL,
   `Telefono` varchar(15) DEFAULT NULL,
   PRIMARY KEY (`IdMonitor`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.monitor: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.monitor: ~2 rows (aproximadamente)
 DELETE FROM `monitor`;
 /*!40000 ALTER TABLE `monitor` DISABLE KEYS */;
+INSERT INTO `monitor` (`IdMonitor`, `CI`, `NombreMonitor`, `Institucion`, `Direccion`, `Telefono`) VALUES
+	(1, '410011', 'Juan Lopez', '', '', ''),
+	(2, '4111117', 'Esteban Fernandez', 'MCC', 'Junin #56', '6478944');
 /*!40000 ALTER TABLE `monitor` ENABLE KEYS */;
 
 -- Volcando estructura para tabla congreso.pago
@@ -147,6 +164,16 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento congreso.PaListarEventos
+DROP PROCEDURE IF EXISTS `PaListarEventos`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaListarEventos`()
+BEGIN
+	select * from listaeventos
+	order by NombreEvento;
+END//
+DELIMITER ;
+
 -- Volcando estructura para tabla congreso.participante
 DROP TABLE IF EXISTS `participante`;
 CREATE TABLE IF NOT EXISTS `participante` (
@@ -167,6 +194,24 @@ CREATE TABLE IF NOT EXISTS `participante` (
 DELETE FROM `participante`;
 /*!40000 ALTER TABLE `participante` DISABLE KEYS */;
 /*!40000 ALTER TABLE `participante` ENABLE KEYS */;
+
+-- Volcando estructura para procedimiento congreso.PaSeleccionarEvento
+DROP PROCEDURE IF EXISTS `PaSeleccionarEvento`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaSeleccionarEvento`(
+	IN _IdEvento int
+)
+BEGIN
+	update evento set seleccionado = 0;
+	update evento set seleccionado = 1 where IdEvento = _IdEvento;
+END//
+DELIMITER ;
+
+-- Volcando estructura para vista congreso.listaeventos
+DROP VIEW IF EXISTS `listaeventos`;
+-- Eliminando tabla temporal y crear estructura final de VIEW
+DROP TABLE IF EXISTS `listaeventos`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `listaeventos` AS select * from evento ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
