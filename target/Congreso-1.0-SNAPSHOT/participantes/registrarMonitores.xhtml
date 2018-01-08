@@ -25,9 +25,9 @@
                         <p:outputLabel value="Institución:" /> 
                         <p:inputText value="#{monitorBean.monitor.institucion}" class="cajaTexto"/>
                     </p:panelGrid>
-                    <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroMonitores"/>
-                    <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroMonitores"/>
-                    <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroMonitores"/>
+                    <p:commandButton value="Nuevo" actionListener="#{monitorBean.limpiarMonitor()}" update=":formRegistroMonitores"/>
+                    <p:commandButton value ="Guardar" actionListener="#{monitorBean.guardarMonitor()}" update=":formRegistroMonitores"/>
+                    <p:commandButton value="Cancelar" actionListener="#{monitorBean.limpiarMonitor()}" update=":formRegistroMonitores"/>
                 </h:form>
             </ui:define>
 
