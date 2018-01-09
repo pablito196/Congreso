@@ -8,16 +8,20 @@ public class EventoParticipante implements EventoParticipanteContrato{
     private int idEventoParticipante;
     private int idEvento;
     private int idParticipante;
+    private int idMonitor;
     private Date fechaRegistro;
+    private String numeroHabitacion;
 
     public EventoParticipante() {
     }
 
-    public EventoParticipante(int idEventoParticipante, int idEvento, int idParticipante, Date fechaRegistro) {
+    public EventoParticipante(int idEventoParticipante, int idEvento, int idParticipante, int idMonitor, Date fechaRegistro, String numeroHabitacion) {
         this.idEventoParticipante = idEventoParticipante;
         this.idEvento = idEvento;
         this.idParticipante = idParticipante;
+        this.idMonitor = idMonitor;
         this.fechaRegistro = fechaRegistro;
+        this.numeroHabitacion = numeroHabitacion;
     }
 
     public int getIdEventoParticipante() {
@@ -50,6 +54,22 @@ public class EventoParticipante implements EventoParticipanteContrato{
 
     public void setFechaRegistro(Date fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
+    }
+
+    public int getIdMonitor() {
+        return idMonitor;
+    }
+
+    public void setIdMonitor(int idMonitor) {
+        this.idMonitor = idMonitor;
+    }
+
+    public String getNumeroHabitacion() {
+        return numeroHabitacion;
+    }
+
+    public void setNumeroHabitacion(String numeroHabitacion) {
+        this.numeroHabitacion = numeroHabitacion;
     }
     
     

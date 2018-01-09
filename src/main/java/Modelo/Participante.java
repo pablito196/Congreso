@@ -16,6 +16,8 @@ public class Participante implements ParticipanteContrato{
     private String direccion;
     private String institucion;
     private String telefono;
+    private String numeroHabitacion;
+    private String observaciones;
     
     private final Conexion con = new Conexion();
     private List<Parametros> parametros;
@@ -23,7 +25,8 @@ public class Participante implements ParticipanteContrato{
     public Participante() {
     }
 
-    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion, String institucion, String telefono) {
+    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion, 
+            String institucion, String telefono, String numeroHabitacion, String observaciones) {
         this.idParticipante = idParticipante;
         this.ci = ci;
         this.nombreParticipante = nombreParticipante;
@@ -32,6 +35,8 @@ public class Participante implements ParticipanteContrato{
         this.direccion = direccion;
         this.institucion = institucion;
         this.telefono = telefono;
+        this.numeroHabitacion = numeroHabitacion;
+        this.observaciones = observaciones;
     }
 
     public int getIdParticipante() {
@@ -96,6 +101,22 @@ public class Participante implements ParticipanteContrato{
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public String getNumeroHabitacion() {
+        return numeroHabitacion;
+    }
+
+    public void setNumeroHabitacion(String numeroHabitacion) {
+        this.numeroHabitacion = numeroHabitacion;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
     
     

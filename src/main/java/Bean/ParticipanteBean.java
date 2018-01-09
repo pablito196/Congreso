@@ -2,6 +2,7 @@ package Bean;
 
 import Modelo.Evento;
 import Modelo.EventoParticipante;
+import Modelo.Pago;
 import Modelo.Participante;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class ParticipanteBean implements Serializable{
     private Evento evento;
     private Participante participante;
     private EventoParticipante eventoParticipante;
-    
+    private Pago pago;
     
     public ParticipanteBean() {
         participante = new Participante();
@@ -46,6 +47,14 @@ public class ParticipanteBean implements Serializable{
 
     public void setEventoParticipante(EventoParticipante eventoParticipante) {
         this.eventoParticipante = eventoParticipante;
+    }
+
+    public Pago getPago() {
+        return pago;
+    }
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
     }
 
     

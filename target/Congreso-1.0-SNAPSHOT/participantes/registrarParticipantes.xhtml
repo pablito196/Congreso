@@ -15,31 +15,36 @@
                 <h:form id="formRegistroParticipantes">
                     <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
                     <p:panelGrid id="pnlParticipantes" columns="2" class="panelGrid">
-                        <p:outputLabel for="cmbEvento" value="Evento:" />
-                        <p:selectOneMenu id="cmbEvento" value="#{participanteBean.eventoParticipante.idEvento}"  styleClass="listaDesplegable">
+                        
+                        <p:outputLabel value="Ci:"/>
+                        <p:inputText value="#{participanteBean.participante.ci}" required="true" class="cajaTexto"/>
+                        <p:outputLabel value="Nombres:" /> 
+                        <p:inputText value="#{participanteBean.participante.nombreParticipante}" class="cajaTexto"/>
+                        <p:outputLabel value="Dirección:" /> 
+                        <p:inputText value="#{participanteBean.participante.direccion}" class="cajaTexto"/>
+                        <p:outputLabel value="Ciudad:" /> 
+                        <p:inputText value="#{participanteBean.participante.ciudad}" class="cajaTexto"/>
+                        <p:outputLabel value="Teléfono:" /> 
+                        <p:inputText value="#{participanteBean.participante.telefono}" class="cajaTexto"/>
+                        <p:outputLabel value="Correo electrónico:" /> 
+                        <p:inputText value="#{participanteBean.participante.correoElectronico}" class="cajaTexto"/>
+                        <p:outputLabel value="Institución:" /> 
+                        <p:inputText value="#{participanteBean.participante.institucion}" class="cajaTexto"/>
+                        <p:outputLabel for="cdFecha" value="Fecha de registro:" />
+                        <p:calendar id="cdFecha" value="#{participanteBean.eventoParticipante.fechaRegistro}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
+                        <p:outputLabel value="Monto pagado:" /> 
+                        <p:inputText value="#{participanteBean.pago.montoPagado}" class="cajaTexto"/>
+                        <p:outputLabel value="Saldo:" /> 
+                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
+                        <p:outputLabel value="Nº de habitación:" /> 
+                        <p:inputText value="#{participanteBean.eventoParticipante.numeroHabitacion}" class="cajaTexto"/>
+                        <p:outputLabel for="cmbMonitor" value="Monitor:" />
+                        <p:selectOneMenu id="cmbEvento" value="#{participanteBean.eventoParticipante.idMonitor}"  styleClass="listaDesplegable">
                             <f:selectItem itemLabel="--Seleccione--" itemValue="" />
                             <f:selectItems value="#{categoriaBean.lstCategorias}" itemValue="#{categoriaBean.categoria.idCategoria}" itemLabel="#{categoriaBean.categoria.descripción}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="Ci:"/>
-                        <p:inputText value="#{eventoBean.evento.nombreEvento}" required="true" class="cajaTexto"/>
-                        <p:outputLabel value="Nombres:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel value="Dirección:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel value="Ciudad:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel value="Teléfono:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel value="Correo electrónico:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel value="Institución:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
-                        <p:outputLabel for="cdFecha" value="Fecha:" />
-                        <p:calendar id="cdFecha" value="#{eventoBean.evento.fecha}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
-                        <p:outputLabel value="Monto pagado:" /> 
-                        <p:inputText value="#{eventoBean.evento.costo}" class="cajaTexto"/>
-                        <p:outputLabel value="Saldo:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
+                        <p:outputLabel value="Observaciones:" /> 
+                        <p:inputText value="#{participanteBean.participante.observaciones}" class="cajaTexto"/>
                     </p:panelGrid>
                     <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
                     <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroParticipantes"/>
