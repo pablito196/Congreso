@@ -146,5 +146,18 @@ public class Evento implements EventoContrato{
         parametros.add(new Parametros("_IdEvento",evento.idEvento));
         con.Ejecutar("PaInsertarEvento", parametros);
     }
+
+    @Override
+    public void ModificarEvento(Evento evento) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEvento",evento.idEvento));
+        parametros.add(new Parametros("_NombreEvento",evento.nombreEvento));
+        parametros.add(new Parametros("_Lugar",evento.lugar));
+        parametros.add(new Parametros("_FechaInicio",evento.fechaInicio));
+        parametros.add(new Parametros("_FechaFin",evento.fechaFin));
+        parametros.add(new Parametros("_Costo",evento.costo));
+        parametros.add(new Parametros("_Descripcion",evento.descripcion));
+        con.Ejecutar("PaModificarEvento", parametros);
+    }
     
 }

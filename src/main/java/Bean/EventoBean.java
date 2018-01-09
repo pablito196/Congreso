@@ -21,6 +21,7 @@ public class EventoBean implements Serializable{
     
     public EventoBean() {
         evento = new Evento();
+        
     }
 
     public Evento getEvento() {
@@ -52,6 +53,7 @@ public class EventoBean implements Serializable{
         }
         return lstEventos;
     }
+
     
     //METODOS
     public void listar() throws Exception
@@ -81,10 +83,17 @@ public class EventoBean implements Serializable{
         evento = new Evento();
     }
     
-    public void seleccionarEvento()
+    public void seleccionarEvento(Evento evento)
     {
         EventoContrato eventoContrato = new Evento();
         eventoContrato.Seleccionar(evento);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Evento seleccionado"));
+    }
+    
+    public void modificarEvento()
+    {
+        EventoContrato eventoContrato = new Evento();
+        eventoContrato.ModificarEvento(evento);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Evento modificado correctamente"));
     }
 }
