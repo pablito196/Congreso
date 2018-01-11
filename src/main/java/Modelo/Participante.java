@@ -3,6 +3,7 @@ package Modelo;
 import Conexion.Conexion;
 import Conexion.Parametros;
 import Contratos.ParticipanteContrato;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class Participante implements ParticipanteContrato{
     private String direccion;
     private String institucion;
     private String telefono;
-    private String numeroHabitacion;
-    private String observaciones;
+    
+    
     
     private final Conexion con = new Conexion();
     private List<Parametros> parametros;
@@ -26,7 +27,7 @@ public class Participante implements ParticipanteContrato{
     }
 
     public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion, 
-            String institucion, String telefono, String numeroHabitacion, String observaciones) {
+            String institucion, String telefono) {
         this.idParticipante = idParticipante;
         this.ci = ci;
         this.nombreParticipante = nombreParticipante;
@@ -35,8 +36,8 @@ public class Participante implements ParticipanteContrato{
         this.direccion = direccion;
         this.institucion = institucion;
         this.telefono = telefono;
-        this.numeroHabitacion = numeroHabitacion;
-        this.observaciones = observaciones;
+        
+        
     }
 
     public int getIdParticipante() {
@@ -103,24 +104,7 @@ public class Participante implements ParticipanteContrato{
         this.telefono = telefono;
     }
 
-    public String getNumeroHabitacion() {
-        return numeroHabitacion;
-    }
-
-    public void setNumeroHabitacion(String numeroHabitacion) {
-        this.numeroHabitacion = numeroHabitacion;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-    
-    
-    
+      
     @Override
     public int GuardarParticipante(Participante participante) {
         int id = 0;
@@ -154,12 +138,70 @@ public class Participante implements ParticipanteContrato{
 
     @Override
     public List<Participante> ListarParticipantes() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        ResultSet listadoParticipantes = con.Listar("PaListarParticipantes");
+
+        ArrayList<Participante> listaParticipantes = new ArrayList<Participante>();
+        try {
+            while (listadoParticipantes.next()) {
+
+                listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"), 
+                                                        listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"), 
+                                                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono")));
+                
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return listaParticipantes;
     }
 
     @Override
-    public Participante BuscarParticipante(Participante participante) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Participante BuscarParticipante(String ciParticipante) {
+        Participante _participante = null;
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_Ci",ciParticipante));
+        ResultSet datosParticipante = con.Listar("PaBuscarParticipante", parametros); 
+        try
+        {
+            while(datosParticipante.next())
+            {
+                _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"), 
+                                                datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"), 
+                                                datosParticipante.getString("Institucion"), telefono);
+                
+            }
+            
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return _participante;
+    }
+
+    @Override
+    public Participante Buscar(String ci) {
+        Participante _participante = null;
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_Ci",ci));
+        ResultSet datosParticipante = con.Listar("PaBuscarParticipante", parametros); 
+        try
+        {
+            while(datosParticipante.next())
+            {
+                _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"), 
+                                                datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"), 
+                                                datosParticipante.getString("Institucion"), telefono);
+                
+            }
+            
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return _participante;
     }
     
 }

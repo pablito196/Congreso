@@ -14,10 +14,23 @@
                 <h2>Registro de participantes</h2>
                 <h:form id="formRegistroParticipantes">
                     <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
-                    <p:panelGrid id="pnlParticipantes" columns="2" class="panelGrid">
-                        
+                    <h:panelGrid id="gridBuscarDatosParticipante" columns="5">
+                        <p:outputLabel value="Ci:" style="font-weight: bold;"/>
+                        <p:inputText value="#{participanteBean.ciParticipante}" size="12" >
+                            <p:ajax event="keyup" listener="#{participanteBean.buscarParticipanteCi()}"
+                                    update=":formRegistroParticipantes:gridDatosParticipante" />
+                        </p:inputText>
+                        <p:commandButton value="..." oncomplete="PF('dialogParticipantes').show();"
+                                         update=":formRegistroParticipantes:dlgParticipantes"/>
+                        <p:commandButton value="Agregar participante" oncomplete="PF('dialogRegistrarParticipantes').show();"
+                                         update=":formRegistroParticipantes:dlgRegistrarParticipantes" />   
+
+                    </h:panelGrid>
+                    <p:separator/>
+                    <p:panelGrid id="gridDatosParticipante" columns="2" class="panelGrid">
+
                         <p:outputLabel value="Ci:"/>
-                        <p:inputText value="#{participanteBean.participante.ci}" required="true" class="cajaTexto"/>
+                        <p:inputText value="#{participanteBean.participante.ci}" class="cajaTexto"/>
                         <p:outputLabel value="Nombres:" /> 
                         <p:inputText value="#{participanteBean.participante.nombreParticipante}" class="cajaTexto"/>
                         <p:outputLabel value="Dirección:" /> 
@@ -33,22 +46,67 @@
                         <p:outputLabel for="cdFecha" value="Fecha de registro:" />
                         <p:calendar id="cdFecha" value="#{participanteBean.eventoParticipante.fechaRegistro}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
                         <p:outputLabel value="Monto pagado:" /> 
-                        <p:inputText value="#{participanteBean.pago.montoPagado}" class="cajaTexto"/>
+                        <p:inputText class="cajaTexto"/>
                         <p:outputLabel value="Saldo:" /> 
-                        <p:inputText value="#{eventoBean.evento.lugar}" class="cajaTexto"/>
+                        <p:inputText  class="cajaTexto"/>
                         <p:outputLabel value="Nº de habitación:" /> 
-                        <p:inputText value="#{participanteBean.eventoParticipante.numeroHabitacion}" class="cajaTexto"/>
+                        <p:inputText  class="cajaTexto"/>
                         <p:outputLabel for="cmbMonitor" value="Monitor:" />
-                        <p:selectOneMenu id="cmbEvento" value="#{participanteBean.eventoParticipante.idMonitor}"  styleClass="listaDesplegable">
+                        <p:selectOneMenu id="cmbMonitor" value="#{participanteBean.eventoParticipante.idMonitor}"  styleClass="listaDesplegable">
                             <f:selectItem itemLabel="--Seleccione--" itemValue="" />
-                            <f:selectItems value="#{categoriaBean.lstCategorias}" itemValue="#{categoriaBean.categoria.idCategoria}" itemLabel="#{categoriaBean.categoria.descripción}"/>
+                            <f:selectItems value="#{monitorBean.lstMonitores}" itemValue="#{monitorBean.monitor.idMonitor}" itemLabel="#{monitorBean.monitor.nombreMonitor}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Observaciones:" /> 
-                        <p:inputText value="#{participanteBean.participante.observaciones}" class="cajaTexto"/>
+                        <p:inputText  class="cajaTexto"/>
                     </p:panelGrid>
                     <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
                     <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroParticipantes"/>
                     <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
+
+                    <!--dialog para mostrar participantes -->
+                    <p:dialog id="dlgParticipantes" widgetVar="dialogParticipantes" modal="true" resizable="false"
+                              showEffect="explode" hideEffect="explode" >
+                        <p:dataTable id="tablaProveedores" paginator="true" paginatorPosition="top" style="width: 700px;"
+                                     var="_participante" value="#{participanteBean.listaParticipantes}" emptyMessage="No hay datos de participantes" rows="15" widgetVar=""  filteredValue="#{participanteBean.listaFiltradaParticipantes}">
+                            <p:column headerText="Ci" filterBy="#{_participante.ci}" filterMatchMode="contains">
+                                <h:outputText value="#{_participante.ci}" />
+                            </p:column>
+                            <p:column headerText="Nombre participante" filterBy="#{_participante.nombreParticipante}" filterMatchMode="contains">
+                                <h:outputText value="#{_participante.nombreParticipante}" />
+                            </p:column>
+                            <p:column headerText="">
+                                <p:commandButton value="Seleccionar" actionListener="#{participanteBean.agregarDatosParticipante(_participante.ci)}"  
+                                                 oncomplete="PF('dialogParticipantes').hide();" 
+                                                 update=":formRegistroParticipantes:gridDatosParticipante"/>
+
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="Cerrar" onclick="PF('dialogProveedores').hide();" />
+                    </p:dialog>
+                    <!-- fin dialogParticipantes -->
+                    <!--dialog para registrar participantes -->
+                    <p:dialog id="dlgRegistrarParticipantes" widgetVar="dialogRegistrarParticipantes" modal="true" resizable="false"
+                              showEffect="explode" hideEffect="explode" header="Registro de participantes">
+                        <p:panelGrid id="gridRegistroParticipante" columns="2" class="panelGrid">
+                            <p:outputLabel value="Ci:"/>
+                            <p:inputText value="#{participanteBean.participante.ci}" class="cajaTexto"/>
+                            <p:outputLabel value="Nombres:" /> 
+                            <p:inputText value="#{participanteBean.participante.nombreParticipante}" class="cajaTexto"/>
+                            <p:outputLabel value="Dirección:" /> 
+                            <p:inputText value="#{participanteBean.participante.direccion}" class="cajaTexto"/>
+                            <p:outputLabel value="Ciudad:" /> 
+                            <p:inputText value="#{participanteBean.participante.ciudad}" class="cajaTexto"/>
+                            <p:outputLabel value="Teléfono:" /> 
+                            <p:inputText value="#{participanteBean.participante.telefono}" class="cajaTexto"/>
+                            <p:outputLabel value="Correo electrónico:" /> 
+                            <p:inputText value="#{participanteBean.participante.correoElectronico}" class="cajaTexto"/>
+                            <p:outputLabel value="Institución:" /> 
+                            <p:inputText value="#{participanteBean.participante.institucion}" class="cajaTexto"/>
+                        </p:panelGrid>
+                        <p:commandButton value ="Guardar" actionListener="#{participanteBean.guardarParticipante()}" update=":formRegistroParticipantes"/>
+                        <p:commandButton value="Cerrar" onclick="PF('dialogRegistrarParticipantes').hide();" />
+                    </p:dialog>
+                    <!-- fin dialogRegistrarParticipantes -->
                 </h:form>
             </ui:define>
 
