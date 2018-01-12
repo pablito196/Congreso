@@ -3,5 +3,6 @@ package Contratos;
 import Modelo.EventoParticipante;
 
 public interface EventoParticipanteContrato {
-    public void GuardarEvento(EventoParticipante eventoParticipante);
+    public int GuardarEvento(EventoParticipante eventoParticipante);
+    public int GuardarEventoParticipante(EventoParticipante eventoParticipante);
 }

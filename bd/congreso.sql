@@ -29,13 +29,14 @@ CREATE TABLE IF NOT EXISTS `evento` (
   `Descripcion` varchar(500) DEFAULT NULL,
   `Seleccionado` bit(1) DEFAULT NULL,
   PRIMARY KEY (`IdEvento`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.evento: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.evento: ~2 rows (aproximadamente)
 DELETE FROM `evento`;
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
 INSERT INTO `evento` (`IdEvento`, `NombreEvento`, `Lugar`, `FechaInicio`, `FechaFin`, `Costo`, `Descripcion`, `Seleccionado`) VALUES
-	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-30 00:00:00', 100.00, 'Primer Congreso', b'0');
+	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-31 00:00:00', 100.00, 'Primer Congreso de jovenes cristianos', b'1'),
+	(2, 'Congreso nacional de misiones', 'Villa bolivariana', '2018-01-09 00:00:00', '2018-01-23 00:00:00', 150.00, 'Incluye hospedaje para todos los participantes', NULL);
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
 
 -- Volcando estructura para tabla congreso.eventoparticipante
@@ -46,18 +47,28 @@ CREATE TABLE IF NOT EXISTS `eventoparticipante` (
   `IdParticipante` int(11) DEFAULT NULL,
   `IdMonitor` int(11) DEFAULT NULL,
   `FechaRegistro` datetime DEFAULT NULL,
+  `NumeroHabitacion` varchar(10) DEFAULT NULL,
+  `Observaciones` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`IdEventoParticipante`),
   KEY `IdEvento` (`IdEvento`),
   KEY `IdParticipante` (`IdParticipante`),
   KEY `IdMonitor` (`IdMonitor`),
-  CONSTRAINT `eventoparticipante_monitor_fk` FOREIGN KEY (`IdMonitor`) REFERENCES `monitor` (`IdMonitor`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `eventoparticipante_evento_fk` FOREIGN KEY (`IdEvento`) REFERENCES `evento` (`IdEvento`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `eventoparticipante_monitor_fk` FOREIGN KEY (`IdMonitor`) REFERENCES `monitor` (`IdMonitor`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `eventoparticipante_participante_fk` FOREIGN KEY (`IdParticipante`) REFERENCES `participante` (`IdParticipante`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.eventoparticipante: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.eventoparticipante: ~7 rows (aproximadamente)
 DELETE FROM `eventoparticipante`;
 /*!40000 ALTER TABLE `eventoparticipante` DISABLE KEYS */;
+INSERT INTO `eventoparticipante` (`IdEventoParticipante`, `IdEvento`, `IdParticipante`, `IdMonitor`, `FechaRegistro`, `NumeroHabitacion`, `Observaciones`) VALUES
+	(3, 1, 3, 2, '2018-01-12 00:00:00', '34', NULL),
+	(4, 1, 3, 1, '2018-01-12 00:00:00', '34', 'ninguna'),
+	(5, 1, 3, 2, '2018-01-12 00:00:00', '34', 'ninguna'),
+	(6, 1, 3, 2, '2018-01-12 00:00:00', '34', 'ninguna'),
+	(7, 1, 3, 1, '2018-01-12 00:00:00', '34', 'ninguna'),
+	(8, 1, 6, 2, '2018-01-12 00:00:00', '34', 'ninguna1'),
+	(9, 1, 6, 1, '2018-01-12 00:00:00', '34', 'ninguna1');
 /*!40000 ALTER TABLE `eventoparticipante` ENABLE KEYS */;
 
 -- Volcando estructura para vista congreso.listaeventos
@@ -72,6 +83,32 @@ CREATE TABLE `listaeventos` (
 	`Costo` DECIMAL(11,2) NULL,
 	`Descripcion` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
 	`Seleccionado` BIT(1) NULL
+) ENGINE=MyISAM;
+
+-- Volcando estructura para vista congreso.listamonitores
+DROP VIEW IF EXISTS `listamonitores`;
+-- Creando tabla temporal para superar errores de dependencia de VIEW
+CREATE TABLE `listamonitores` (
+	`IdMonitor` INT(11) NOT NULL,
+	`CI` VARCHAR(10) NULL COLLATE 'utf8_general_ci',
+	`NombreMonitor` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`Institucion` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`Direccion` VARCHAR(300) NULL COLLATE 'utf8_general_ci',
+	`Telefono` VARCHAR(15) NULL COLLATE 'utf8_general_ci'
+) ENGINE=MyISAM;
+
+-- Volcando estructura para vista congreso.listaparticipantes
+DROP VIEW IF EXISTS `listaparticipantes`;
+-- Creando tabla temporal para superar errores de dependencia de VIEW
+CREATE TABLE `listaparticipantes` (
+	`IdParticipante` INT(11) NOT NULL,
+	`CI` VARCHAR(10) NULL COLLATE 'utf8_general_ci',
+	`NombreParticipante` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`Ciudad` VARCHAR(50) NULL COLLATE 'utf8_general_ci',
+	`Direccion` VARCHAR(150) NULL COLLATE 'utf8_general_ci',
+	`CorreoElectronico` VARCHAR(300) NULL COLLATE 'utf8_general_ci',
+	`Telefono` VARCHAR(15) NULL COLLATE 'utf8_general_ci',
+	`Institucion` VARCHAR(500) NULL COLLATE 'utf8_general_ci'
 ) ENGINE=MyISAM;
 
 -- Volcando estructura para tabla congreso.monitor
@@ -93,6 +130,26 @@ INSERT INTO `monitor` (`IdMonitor`, `CI`, `NombreMonitor`, `Institucion`, `Direc
 	(1, '410011', 'Juan Lopez', '', '', ''),
 	(2, '4111117', 'Esteban Fernandez', 'MCC', 'Junin #56', '6478944');
 /*!40000 ALTER TABLE `monitor` ENABLE KEYS */;
+
+-- Volcando estructura para procedimiento congreso.PaBuscarEventoSeleccionado
+DROP PROCEDURE IF EXISTS `PaBuscarEventoSeleccionado`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaBuscarEventoSeleccionado`()
+BEGIN
+	select * from listaeventos where Seleccionado = 1;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaBuscarParticipante
+DROP PROCEDURE IF EXISTS `PaBuscarParticipante`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaBuscarParticipante`(
+	IN _Ci varchar(10)
+)
+BEGIN
+	select * from participante where CI = _Ci;
+END//
+DELIMITER ;
 
 -- Volcando estructura para tabla congreso.pago
 DROP TABLE IF EXISTS `pago`;
@@ -118,12 +175,30 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PaInsertarEvento`(
 	IN _NombreEvento varchar(500),
 	IN _Lugar varchar(500),
-	IN _Fecha datetime,
+	IN _FechaInicio datetime,
+	IN _FechaFin datetime,
 	IN _Costo decimal(11,2),
 	IN _Descripcion varchar(500)
 )
 BEGIN
-	insert into Evento (NombreEvento,Lugar,Fecha,Costo,Descripcion) values (_NombreEvento,_Lugar,_Fecha,_Costo,_Descripcion);
+	insert into Evento (NombreEvento,Lugar,FechaInicio,FechaFin,Costo,Descripcion) values (_NombreEvento,_Lugar,_FechaInicio,_FechaFin,_Costo,_Descripcion);
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaInsertarEventoParticipante
+DROP PROCEDURE IF EXISTS `PaInsertarEventoParticipante`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaInsertarEventoParticipante`(
+	IN _IdEvento INT,
+    IN _IdParticipante INT,
+    IN _IdMonitor INT,
+    IN _FechaRegistro datetime,
+    IN _NumeroHabitacion varchar(10),
+	In _Observaciones varchar(1000)
+)
+BEGIN
+	insert into eventoparticipante (IdEvento,IdParticipante,IdMonitor,FechaRegistro,NumeroHabitacion,Observaciones) values 
+									(_IdEvento,_IdParticipante,_IdMonitor,_FechaRegistro,_NumeroHabitacion,_Observaciones);
 END//
 DELIMITER ;
 
@@ -140,6 +215,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `PaInsertarMonitor`(
 BEGIN
 	INSERT INTO monitor (CI,NombreMonitor,Direccion,Institucion,Telefono)
 	values (_Ci,_NombreMonitor,_Direccion,_Institucion,_Telefono);
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaInsertarPago
+DROP PROCEDURE IF EXISTS `PaInsertarPago`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaInsertarPago`(
+	IN _IdEventoParticipante INT,
+    IN _Fecha DATETIME,
+    IN _MontoPagado decimal(11,2),
+    IN _Saldo decimal(11,2)
+)
+BEGIN
+
+  insert into pago (IdEventoParticipante,Fecha,MontoPagado,Saldo) values
+			  (_IdEventoParticipante,_Fecha,_MontoPagado,_Saldo);
 END//
 DELIMITER ;
 
@@ -174,6 +265,46 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento congreso.PaListarMonitores
+DROP PROCEDURE IF EXISTS `PaListarMonitores`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaListarMonitores`()
+BEGIN
+	select * from listamonitores order by NombreMonitor;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaListarParticipantes
+DROP PROCEDURE IF EXISTS `PaListarParticipantes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaListarParticipantes`()
+BEGIN
+	select * from listaparticipantes
+	order by NombreParticipante asc;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaModificarEvento
+DROP PROCEDURE IF EXISTS `PaModificarEvento`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaModificarEvento`(
+	IN _IdEvento int,
+	IN _NombreEvento varchar(500),
+	IN _Lugar varchar(500),
+	IN _FechaInicio datetime,
+	IN _FechaFin datetime,
+	IN _Costo decimal(11,2),
+	IN _Descripcion varchar(500)
+)
+BEGIN
+	update evento set NombreEvento = _NombreEvento,
+			Lugar = _Lugar, FechaInicio = _FechaInicio,
+			FechaFin = _FechaFin, Costo = _Costo,
+			Descripcion = _Descripcion
+	where IdEvento = _IdEvento;
+END//
+DELIMITER ;
+
 -- Volcando estructura para tabla congreso.participante
 DROP TABLE IF EXISTS `participante`;
 CREATE TABLE IF NOT EXISTS `participante` (
@@ -185,14 +316,19 @@ CREATE TABLE IF NOT EXISTS `participante` (
   `CorreoElectronico` varchar(300) DEFAULT NULL,
   `Telefono` varchar(15) DEFAULT NULL,
   `Institucion` varchar(500) DEFAULT NULL,
-  `NumeroHabitacion` varchar(10) DEFAULT NULL,
-  `Observaciones` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`IdParticipante`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.participante: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.participante: ~6 rows (aproximadamente)
 DELETE FROM `participante`;
 /*!40000 ALTER TABLE `participante` DISABLE KEYS */;
+INSERT INTO `participante` (`IdParticipante`, `CI`, `NombreParticipante`, `Ciudad`, `Direccion`, `CorreoElectronico`, `Telefono`, `Institucion`) VALUES
+	(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+	(2, '4103785', 'Jose Flores', '', '', '', '', ''),
+	(3, '5678941', 'Jorge Perez', 'Sucre', 'Pando #49', 'jorge@gmail.com', '6478954', 'MCC'),
+	(4, '', '', '', '', '', '', ''),
+	(5, '', '', '', '', '', '', ''),
+	(6, '7894561', 'Luis Lopez', 'Sucre', 'Av. Jaime Mendoza', 'luis@gmail.com', '6478945', 'MCC');
 /*!40000 ALTER TABLE `participante` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento congreso.PaSeleccionarEvento
@@ -212,6 +348,18 @@ DROP VIEW IF EXISTS `listaeventos`;
 -- Eliminando tabla temporal y crear estructura final de VIEW
 DROP TABLE IF EXISTS `listaeventos`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `listaeventos` AS select * from evento ;
+
+-- Volcando estructura para vista congreso.listamonitores
+DROP VIEW IF EXISTS `listamonitores`;
+-- Eliminando tabla temporal y crear estructura final de VIEW
+DROP TABLE IF EXISTS `listamonitores`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `listamonitores` AS select * from monitor ;
+
+-- Volcando estructura para vista congreso.listaparticipantes
+DROP VIEW IF EXISTS `listaparticipantes`;
+-- Eliminando tabla temporal y crear estructura final de VIEW
+DROP TABLE IF EXISTS `listaparticipantes`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `listaparticipantes` AS select * from participante ;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

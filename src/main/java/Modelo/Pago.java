@@ -1,8 +1,12 @@
 package Modelo;
 
+import Conexion.Conexion;
+import Conexion.Parametros;
 import Contratos.PagoContrato;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Pago implements PagoContrato{
 
@@ -12,6 +16,9 @@ public class Pago implements PagoContrato{
     private BigDecimal montoPagado;
     private BigDecimal saldo;
 
+    private final Conexion con = new Conexion();
+    private List<Parametros> parametros;
+    
     public Pago() {
     }
 
@@ -67,7 +74,12 @@ public class Pago implements PagoContrato{
     
     @Override
     public void GuardarPago(Pago pago) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEventoParticipante",pago.idEventoParticipante));
+        parametros.add(new Parametros("_Fecha",pago.fecha));
+        parametros.add(new Parametros("_MontoPagado",pago.montoPagado));
+        parametros.add(new Parametros("_Saldo",pago.saldo));
+        con.Ejecutar("PaInsertarPago", parametros);
     }
     
 }

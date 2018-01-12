@@ -1,11 +1,15 @@
 package Bean;
 
+import Contratos.EventoContrato;
+import Contratos.EventoParticipanteContrato;
+import Contratos.PagoContrato;
 import Contratos.ParticipanteContrato;
 import Modelo.Evento;
 import Modelo.EventoParticipante;
 import Modelo.Pago;
 import Modelo.Participante;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -27,12 +31,17 @@ public class ParticipanteBean implements Serializable {
     private Pago pago;
 
     private String ciParticipante;
+    private BigDecimal montoPagado;
+    private BigDecimal saldo;
 
     public ParticipanteBean() {
         participante = new Participante();
         evento = new Evento();
         eventoParticipante = new EventoParticipante();
+        pago = new Pago();
         ciParticipante = "";
+        montoPagado = new BigDecimal(0);
+        saldo = new BigDecimal(0);
         listaParticipantes = new ArrayList<>();
     }
 
@@ -94,6 +103,22 @@ public class ParticipanteBean implements Serializable {
         this.listaFiltradaParticipantes = listaFiltradaParticipantes;
     }
 
+    public BigDecimal getMontoPagado() {
+        return montoPagado;
+    }
+
+    public void setMontoPagado(BigDecimal montoPagado) {
+        this.montoPagado = montoPagado;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
     //METODOS
     public void guardarParticipante() {
         ParticipanteContrato participanteContrato = new Participante();
@@ -134,9 +159,26 @@ public class ParticipanteBean implements Serializable {
         participante = participanteContrato.Buscar(nit);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Datos del participante agregados"));
     }
-    
-    public void registroEventoParticipante()
-    {
-        
+
+    public void registroEventoParticipante() {
+        int idEventoParticipante = 0;
+        EventoContrato eventoContrato = new Evento();
+        EventoParticipanteContrato eventoParticipanteContrato = new EventoParticipante();
+        PagoContrato pagoContrato = new Pago();
+
+        evento = eventoContrato.EsSeleccionado();
+        if (evento != null) {
+            eventoParticipante.setIdParticipante(participante.getIdParticipante());
+            eventoParticipante.setIdEvento(evento.getIdEvento());
+            idEventoParticipante = eventoParticipanteContrato.GuardarEventoParticipante(eventoParticipante);
+            pago.setIdEventoParticipante(idEventoParticipante);
+            pago.setFecha(eventoParticipante.getFechaRegistro());
+            pagoContrato.GuardarPago(pago);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Participante registrado en el evento correctamente"));
+        }
+        else
+        {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar un congreso"));
+        }
     }
 }

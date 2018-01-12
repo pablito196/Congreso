@@ -136,11 +136,6 @@ public class Evento implements EventoContrato{
     }
 
     @Override
-    public Evento BuscarEvento(Evento evento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void Seleccionar(Evento evento) {
         parametros = new ArrayList<>();
         parametros.add(new Parametros("_IdEvento",evento.idEvento));
@@ -158,6 +153,27 @@ public class Evento implements EventoContrato{
         parametros.add(new Parametros("_Costo",evento.costo));
         parametros.add(new Parametros("_Descripcion",evento.descripcion));
         con.Ejecutar("PaModificarEvento", parametros);
+    }
+
+    @Override
+    public Evento EsSeleccionado() {
+        Evento _evento = null;
+        ResultSet datosEvento = con.Listar("PaBuscarEventoSeleccionado"); 
+        try
+        {
+            while(datosEvento.next())
+            {
+                _evento = new Evento(datosEvento.getInt("IdEvento"), datosEvento.getString("NombreEvento"), datosEvento.getString("Lugar"), 
+                                     datosEvento.getDate("FechaInicio"), datosEvento.getDate("FechaFin"), datosEvento.getBigDecimal("Costo"), 
+                                     datosEvento.getString("Descripcion"), datosEvento.getBoolean("Seleccionado"));
+                
+            }
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return _evento;
     }
     
 }

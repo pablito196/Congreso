@@ -46,21 +46,21 @@
                         <p:outputLabel for="cdFecha" value="Fecha de registro:" />
                         <p:calendar id="cdFecha" value="#{participanteBean.eventoParticipante.fechaRegistro}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
                         <p:outputLabel value="Monto pagado:" /> 
-                        <p:inputText class="cajaTexto"/>
+                        <p:inputText  value="#{participanteBean.montoPagado}" class="cajaTexto"/>
                         <p:outputLabel value="Saldo:" /> 
-                        <p:inputText  class="cajaTexto"/>
+                        <p:inputText  value="#{participanteBean.saldo}" class="cajaTexto"/>
                         <p:outputLabel value="Nº de habitación:" /> 
-                        <p:inputText  class="cajaTexto"/>
+                        <p:inputText value="#{participanteBean.eventoParticipante.numeroHabitacion}" class="cajaTexto"/>
                         <p:outputLabel for="cmbMonitor" value="Monitor:" />
                         <p:selectOneMenu id="cmbMonitor" value="#{participanteBean.eventoParticipante.idMonitor}"  styleClass="listaDesplegable">
                             <f:selectItem itemLabel="--Seleccione--" itemValue="" />
                             <f:selectItems value="#{monitorBean.lstMonitores}" itemValue="#{monitorBean.monitor.idMonitor}" itemLabel="#{monitorBean.monitor.nombreMonitor}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Observaciones:" /> 
-                        <p:inputText  class="cajaTexto"/>
+                        <p:inputText value="#{participanteBean.eventoParticipante.observaciones}" class="cajaTexto"/>
                     </p:panelGrid>
                     <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
-                    <p:commandButton value ="Guardar" actionListener="#{eventoBean.guardarEvento()}" update=":formRegistroParticipantes"/>
+                    <p:commandButton value ="Guardar" actionListener="#{participanteBean.registroEventoParticipante()}" update=":formRegistroParticipantes"/>
                     <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
 
                     <!--dialog para mostrar participantes -->
