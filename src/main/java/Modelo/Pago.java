@@ -81,5 +81,15 @@ public class Pago implements PagoContrato{
         parametros.add(new Parametros("_Saldo",pago.saldo));
         con.Ejecutar("PaInsertarPago", parametros);
     }
+
+    @Override
+    public void Guardar(Pago pago) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEventoParticipante",pago.idEventoParticipante));
+        parametros.add(new Parametros("_Fecha",pago.fecha));
+        parametros.add(new Parametros("_MontoPagado",pago.montoPagado));
+        parametros.add(new Parametros("_Saldo",pago.saldo));
+        con.Ejecutar("PaInsertarPago", parametros);
+    }
     
 }

@@ -3,6 +3,7 @@ package Modelo;
 import Conexion.Conexion;
 import Conexion.Parametros;
 import Contratos.EventoParticipanteContrato;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,30 +90,7 @@ public class EventoParticipante implements EventoParticipanteContrato{
         this.observaciones = observaciones;
     }
     
-    
-    
-    @Override
-    public int GuardarEvento(EventoParticipante eventoParticipante) {
-        
-        int id = 0;
-       // System.out.println("entra a guardar modelo hoja ruta");
-        parametros = new ArrayList<>();
-        parametros.add(new Parametros("_IdEvento",eventoParticipante.idEvento));
-        parametros.add(new Parametros("_IdParticipante",eventoParticipante.idParticipante));
-        parametros.add(new Parametros("_IdMonitor",eventoParticipante.idMonitor));
-        parametros.add(new Parametros("_FechaRegistro",eventoParticipante.fechaRegistro));
-        parametros.add(new Parametros("_NumeroHabitacion",eventoParticipante.numeroHabitacion));
-        parametros.add(new Parametros("_Observaciones",eventoParticipante.observaciones));
-                
-        Object objectEventoParticipante = con.PedirEscalar("PaInsertarEventoParticipante", parametros);
-        
-        id = Integer.parseInt(objectEventoParticipante.toString());
-       
-        return id;
-        
-    }
-
-    @Override
+  @Override
     public int GuardarEventoParticipante(EventoParticipante eventoParticipante) {
         int id = 0;
        // System.out.println("entra a guardar modelo hoja ruta");
@@ -130,5 +108,32 @@ public class EventoParticipante implements EventoParticipanteContrato{
        
         return id;
     }
-    
+
+    @Override
+    public EventoParticipante BuscarParticipanteEvento(int idParticipante, int idEvento) {
+        EventoParticipante _eventoParticipante = null;
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdParticipante",idParticipante));
+        parametros.add(new Parametros("_IdEvento",idEvento));
+        ResultSet datosParticipanteEvento = con.Listar("PaBuscarParticipanteEvento", parametros); 
+        try
+        {
+            while(datosParticipanteEvento.next())
+            {
+                _eventoParticipante = new EventoParticipante(datosParticipanteEvento.getInt("IdEventoParticipante"), datosParticipanteEvento.getInt("IdEvento"), 
+                                                                                datosParticipanteEvento.getInt("IdParticipante"), datosParticipanteEvento.getInt("IdMonitor"), 
+                                                                                datosParticipanteEvento.getDate("FechaRegistro"), datosParticipanteEvento.getString("NumeroHabitacion"), 
+                                                                                datosParticipanteEvento.getString("Observaciones"));
+                
+            }
+            
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return _eventoParticipante;
+    }
+
+       
 }

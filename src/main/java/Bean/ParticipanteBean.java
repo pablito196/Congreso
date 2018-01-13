@@ -165,20 +165,38 @@ public class ParticipanteBean implements Serializable {
         EventoContrato eventoContrato = new Evento();
         EventoParticipanteContrato eventoParticipanteContrato = new EventoParticipante();
         PagoContrato pagoContrato = new Pago();
+        EventoParticipante _eventoParticipante = new EventoParticipante();
 
         evento = eventoContrato.EsSeleccionado();
         if (evento != null) {
-            eventoParticipante.setIdParticipante(participante.getIdParticipante());
-            eventoParticipante.setIdEvento(evento.getIdEvento());
-            idEventoParticipante = eventoParticipanteContrato.GuardarEventoParticipante(eventoParticipante);
-            pago.setIdEventoParticipante(idEventoParticipante);
-            pago.setFecha(eventoParticipante.getFechaRegistro());
-            pagoContrato.GuardarPago(pago);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Participante registrado en el evento correctamente"));
-        }
-        else
-        {
+            _eventoParticipante = eventoParticipanteContrato.BuscarParticipanteEvento(participante.getIdParticipante(), evento.getIdEvento());
+            if (_eventoParticipante == null) {
+                eventoParticipante.setIdParticipante(participante.getIdParticipante());
+                eventoParticipante.setIdEvento(evento.getIdEvento());
+                idEventoParticipante = eventoParticipanteContrato.GuardarEventoParticipante(eventoParticipante);
+                pago.setIdEventoParticipante(idEventoParticipante);
+                pago.setFecha(eventoParticipante.getFechaRegistro());
+                pago.setMontoPagado(montoPagado);
+                pago.setSaldo(saldo);
+                pagoContrato.Guardar(pago);
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Participante registrado en el evento correctamente"));
+                nuevoRegistroParticipanteEvento();
+            }
+            else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El participante ingresado ya se encuentra registrado en el evento"));
+                nuevoRegistroParticipanteEvento();
+            }
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar un congreso"));
         }
+    }
+    
+    public void nuevoRegistroParticipanteEvento()
+    {
+        participante = new Participante();
+        eventoParticipante = new EventoParticipante();
+        pago = new Pago();
+        montoPagado = new BigDecimal(0);
+        saldo = new BigDecimal(0);
     }
 }
