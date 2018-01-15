@@ -2,15 +2,20 @@ package Bean;
 
 import Contratos.EventoParticipantePagoContrato;
 import Modelo.EventoParticipantePago;
+import Utiles.PdfPrint;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 import javax.faces.view.ViewScoped;
+import net.sf.jasperreports.engine.JRException;
 
 @ManagedBean
 @Named(value = "eventoParticipanteBean")
 @ViewScoped
-public class EventoParticipanteBean {
+public class EventoParticipanteBean implements Serializable{
 
     private List<EventoParticipantePago> listaParticipantesEvento;
     private List<EventoParticipantePago> listaFiltradaParticipantesEvento;
@@ -36,5 +41,15 @@ public class EventoParticipanteBean {
         this.listaFiltradaParticipantesEvento = listaFiltradaParticipantesEvento;
     }
     
+    public void printPDFListaParticipantesEvento() throws JRException, IOException {
+        
+        PdfPrint imprimirPdf = new PdfPrint();
+        
+        List<EventoParticipantePago> participantesEvento = new ArrayList<>();
+        participantesEvento = this.listaParticipantesEvento;
+        String filename = "ListaParticipantesEvento.pdf";
+        String JasperPath = "resources/reportes/ListaParticipantes.jasper";
+        imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
+    }
     
 }

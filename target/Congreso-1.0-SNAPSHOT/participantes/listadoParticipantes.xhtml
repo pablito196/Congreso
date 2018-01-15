@@ -13,39 +13,53 @@
             <ui:define name="content">
                 <h2>Listado de participantes</h2>
 
-                    <h:form id="formAdministrarParticipantes" >
-                        <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
-                        <h:form id="formAdministrarClientes" >
-                    <p:dataTable id="tablaClientes" paginator="true" paginatorPosition="top" 
-                                 var="ct" value="#{clienteBEAN.listaClientes}" emptyMessage="No hay datos de clientes" rows="15" widgetVar=""  filteredValue="#{clienteBEAN.listaFiltradaClientes}">
-                        <p:column headerText="NIT/CI" filterBy="#{ct.ciCliente}" filterMatchMode="contains">
-                            <h:outputText value="#{ct.ciCliente}" />
-                        </p:column>
-                        <p:column headerText="Nombres / Razón Social" filterBy="#{ct.nombresCliente}" filterMatchMode="contains">
-                            <h:outputText value="#{ct.nombresCliente}" />
-                        </p:column>
-                        <p:column headerText="Dirección" filterBy="#{ct.direccion}" filterMatchMode="contains">
-                            <h:outputText value="#{ct.direccion}" />
-                        </p:column>
-                        <p:column headerText="Teléfono">
-                            <h:outputText value="#{ct.telefono}" />
-                        </p:column>
-                        <p:column headerText="Celular">
-                            <h:outputText value="#{ct.celular}" />
-                        </p:column>
-                        <p:column headerText="Correo electrónico">
-                            <h:outputText value="#{ct.correoElectronico}" />
-                        </p:column>
-                        <p:column headerText="Estado">
-                            <h:outputText value="#{ct.estado}" />
-                        </p:column>
-                        <p:column headerText="Modificar">
-                            <p:commandButton value="Modificar" oncomplete="PF('dialogModificarCliente').show();" update="formModificarCliente">
-                                <f:setPropertyActionListener target="#{clienteBEAN.cliente}" value="#{ct}"/>
-                            </p:commandButton>
+                <h:form id="formAdministrarParticipantes" >
+                    <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
 
+                    <p:dataTable id="tablaParticipantes" paginator="true" paginatorPosition="top" 
+                                 var="_participante" value="#{eventoParticipanteBean.listaParticipantesEvento}" emptyMessage="No hay datos de participantes" rows="15" widgetVar=""  filteredValue="#{eventoParticipanteBean.listaFiltradaParticipantesEvento}">
+                        <p:column headerText="IdParticipanteEvento" visible="false">
+                            <h:outputText value="#{_participante.idEventoParticipante}" />
                         </p:column>
+                        <p:column headerText="CI" filterBy="#{_participante.ci}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.ci}" />
+                        </p:column>
+                        <p:column headerText="Participante" filterBy="#{_participante.nombreParticipante}" filterMatchMode="contains" style="width: 150px; text-align: center">
+                            <h:outputText value="#{_participante.nombreParticipante}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" filterBy="#{_participante.ciudad}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.ciudad}" />
+                        </p:column>
+                        <p:column headerText="Teléfono" filterBy="#{_participante.telefono}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.telefono}" />
+                        </p:column>
+                        <p:column headerText="Institucion" filterBy="#{_participante.institucion}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.institucion}" />
+                        </p:column>
+                        <p:column headerText="Nº Habitación" filterBy="#{_participante.numeroHabitacion}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.numeroHabitacion}"  />
+                        </p:column>
+                        <p:column headerText="Fecha inscripción" filterBy="#{_participante.fechaRegistro}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.fechaRegistro}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Monitor" filterBy="#{_participante.nombreMonitor}" filterMatchMode="contains">
+                            <h:outputText value="#{_participante.nombreMonitor}" />
+                        </p:column>
+                        <p:column headerText="Monto" filterBy="#{_participante.montoPagado}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.montoPagado}" />
+                        </p:column>
+                        <p:column headerText="Saldo" filterBy="#{_participante.saldo}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.saldo}" />
+                        </p:column>
+
                     </p:dataTable>
+                    <p:separator/>
+                    <h:commandLink id="btnImprimir" actionListener="#{eventoParticipanteBean.printPDFListaParticipantesEvento()}"  title="Vista previa" style="text-align: center">
+                            <p:graphicImage style="width:25px; text-align: center" url="/resources/images/pdf.png"/>
+
+                        </h:commandLink>
                 </h:form>
             </ui:define>
 

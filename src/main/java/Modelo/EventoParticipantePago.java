@@ -29,7 +29,7 @@ public class EventoParticipantePago implements EventoParticipantePagoContrato{
     public EventoParticipantePago() {
     }
 
-    public EventoParticipantePago(int idEventoParticipante, String ci, String nombreParticipante, String ciudad, String telefono, String numeroHabitacion, Date fechaRegistro, String nombreMonitor, BigDecimal montoPagado, BigDecimal saldo) {
+    public EventoParticipantePago(int idEventoParticipante, String ci, String nombreParticipante, String ciudad, String telefono, String numeroHabitacion, Date fechaRegistro, String nombreMonitor, BigDecimal montoPagado, BigDecimal saldo, String institucion) {
         this.idEventoParticipante = idEventoParticipante;
         this.ci = ci;
         this.nombreParticipante = nombreParticipante;
@@ -40,6 +40,7 @@ public class EventoParticipantePago implements EventoParticipantePagoContrato{
         this.nombreMonitor = nombreMonitor;
         this.montoPagado = montoPagado;
         this.saldo = saldo;
+        this.institucion = institucion;
     }
 
     public int getIdEventoParticipante() {
@@ -143,7 +144,8 @@ public class EventoParticipantePago implements EventoParticipantePagoContrato{
                 listaEventoParticipantes.add(new EventoParticipantePago(listadoEventoParticipantes.getInt("IdEventoParticipante"), listadoEventoParticipantes.getString("CI"), 
                                                         listadoEventoParticipantes.getString("NombreParticipante"), listadoEventoParticipantes.getString("Ciudad"), listadoEventoParticipantes.getString("Telefono"), 
                                                         listadoEventoParticipantes.getString("NumeroHabitacion"), listadoEventoParticipantes.getDate("FechaRegistro"), listadoEventoParticipantes.getString("NombreMonitor"),
-                                                        listadoEventoParticipantes.getBigDecimal("MontoPagado"), listadoEventoParticipantes.getBigDecimal("Saldo")));
+                                                        listadoEventoParticipantes.getBigDecimal("MontoPagado"), listadoEventoParticipantes.getBigDecimal("Saldo"),
+                                                        listadoEventoParticipantes.getString("Institucion")));
             }
             
         }

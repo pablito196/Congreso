@@ -1,5 +1,8 @@
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Conexion\Parametros.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Bean\EventoBean.java
+E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Bean\EventoParticipanteBean.java
+E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Modelo\EventoParticipantePago.java
+E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Contratos\EventoParticipantePagoContrato.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Contratos\ParticipanteContrato.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Modelo\Monitor.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Modelo\Participante.java
@@ -7,7 +10,9 @@ E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Contratos\EventoCon
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Bean\ParticipanteBean.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Conexion\Conexion.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Contratos\EventoParticipanteContrato.java
+E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Contratos\PagoContrato.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Modelo\Evento.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Modelo\EventoParticipante.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Bean\MonitorBean.java
 E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Contratos\MonitorContrato.java
+E:\SISTEMAS DESARROLLADOS\CongresoGit\Congreso\src\main\java\Modelo\Pago.java

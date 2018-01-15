@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3cf9e9bb-a18a-4ca3-9835-98ac3acdebaf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="mdx">
+		<![CDATA[]]>
+	</queryString>
+	<field name="idEventoParticipante" class="java.lang.Number">
+		<fieldDescription><![CDATA[idEventoParticipante]]></fieldDescription>
+	</field>
+	<field name="ci" class="java.lang.String">
+		<fieldDescription><![CDATA[ci]]></fieldDescription>
+	</field>
+	<field name="nombreParticipante" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreParticipante]]></fieldDescription>
+	</field>
+	<field name="ciudad" class="java.lang.String">
+		<fieldDescription><![CDATA[ciudad]]></fieldDescription>
+	</field>
+	<field name="telefono" class="java.lang.String">
+		<fieldDescription><![CDATA[telefono]]></fieldDescription>
+	</field>
+	<field name="institucion" class="java.lang.String">
+		<fieldDescription><![CDATA[institucion]]></fieldDescription>
+	</field>
+	<field name="numeroHabitacion" class="java.lang.String">
+		<fieldDescription><![CDATA[numeroHabitacion]]></fieldDescription>
+	</field>
+	<field name="fechaRegistro" class="java.util.Date">
+		<fieldDescription><![CDATA[fechaRegistro]]></fieldDescription>
+	</field>
+	<field name="nombreMonitor" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreMonitor]]></fieldDescription>
+	</field>
+	<field name="montoPagado" class="java.lang.Number">
+		<fieldDescription><![CDATA[montoPagado]]></fieldDescription>
+	</field>
+	<field name="saldo" class="java.lang.Number">
+		<fieldDescription><![CDATA[saldo]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="37" splitType="Stretch">
+			<staticText>
+				<reportElement x="176" y="15" width="197" height="20" uuid="fee2e63f-1430-4b9f-8573-89f64d2dbfa8"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LISTA DE PARTICIPANTES]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="11" y="1" width="31" height="14" uuid="1852a323-ba4f-4d8d-b6a1-8e64876ee69e"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ci]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="62" y="1" width="100" height="14" uuid="8b30144e-a4bf-48e8-a980-e25a1cc8af80"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Participante]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="186" y="1" width="73" height="14" uuid="883ecd93-3f6e-49c2-9416-132b75a1e8cd"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ciudad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="259" y="0" width="70" height="15" uuid="ac2fc34b-2046-4a4e-9a2f-955db1a1fb8d"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Teléfono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="329" y="1" width="83" height="14" uuid="3bdbaa10-3a6c-4282-a35f-082bf12163d0"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Institución]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="411" y="1" width="59" height="14" uuid="1433eb2a-5419-4a45-b919-7b35f2fb3d71"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Habitación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="1" width="84" height="14" uuid="96719027-90a3-4705-ac07-e1e3e932b813"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Monitor]]></text>
+			</staticText>
+			<line>
+				<reportElement x="3" y="17" width="551" height="1" uuid="7a00de90-1e94-405f-a5fb-3fe244daaad1"/>
+				<graphicElement>
+					<pen lineWidth="1.25" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="3" y="0" width="52" height="14" uuid="39f4c5e4-5cbd-47fc-b2fd-43842a00b546"/>
+				<textFieldExpression><![CDATA[$F{ci}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="55" y="1" width="131" height="13" uuid="0d8540ed-58bb-4497-b7f4-037ecf8b5f3a"/>
+				<textFieldExpression><![CDATA[$F{nombreParticipante}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="185" y="1" width="74" height="13" uuid="179c798c-df05-4da1-b6e5-74221b3ea4a3"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{ciudad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="259" y="0" width="70" height="14" uuid="7f482c12-ebe6-4a0e-82d5-591db5b2ddf8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="329" y="0" width="83" height="14" uuid="b929292b-e436-4ad4-a1f9-cc75c14d2a99"/>
+				<textFieldExpression><![CDATA[$F{institucion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="423" y="1" width="28" height="13" uuid="b9775728-fb84-4db3-93e9-47036ff75b07"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{numeroHabitacion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="1" width="100" height="13" uuid="281038f8-ef2c-46d9-8742-191e06f4162e"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nombreMonitor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="25" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="47" splitType="Stretch">
+			<textField>
+				<reportElement x="431" y="25" width="80" height="20" uuid="639efc2d-85bb-4fe6-808d-e70616e0d35c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="511" y="25" width="40" height="20" uuid="7a4b5019-7ea5-4ec5-9f7c-54f49bc0d76e"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
