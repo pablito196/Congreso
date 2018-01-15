@@ -155,5 +155,28 @@ public class EventoParticipantePago implements EventoParticipantePagoContrato{
         }        
         return listaEventoParticipantes;
     }
+
+    @Override
+    public List<EventoParticipantePago> ListarParticipantesPagoPendiente() {
+        ResultSet listadoEventoParticipantes = con.Listar("PaListarParticipantesPagoPendiente"); 
+        ArrayList<EventoParticipantePago> listaEventoParticipantes = new ArrayList<EventoParticipantePago>();
+        try
+        {
+            while(listadoEventoParticipantes.next())
+            {
+                listaEventoParticipantes.add(new EventoParticipantePago(listadoEventoParticipantes.getInt("IdEventoParticipante"), listadoEventoParticipantes.getString("CI"), 
+                                                        listadoEventoParticipantes.getString("NombreParticipante"), listadoEventoParticipantes.getString("Ciudad"), listadoEventoParticipantes.getString("Telefono"), 
+                                                        listadoEventoParticipantes.getString("NumeroHabitacion"), listadoEventoParticipantes.getDate("FechaRegistro"), listadoEventoParticipantes.getString("NombreMonitor"),
+                                                        listadoEventoParticipantes.getBigDecimal("MontoPagado"), listadoEventoParticipantes.getBigDecimal("Saldo"),
+                                                        listadoEventoParticipantes.getString("Institucion")));
+            }
+            
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return listaEventoParticipantes;
+    }
     
 }

@@ -19,6 +19,8 @@ public class EventoParticipanteBean implements Serializable{
 
     private List<EventoParticipantePago> listaParticipantesEvento;
     private List<EventoParticipantePago> listaFiltradaParticipantesEvento;
+    private List<EventoParticipantePago> listaParticipantesFaltaPago;
+    private List<EventoParticipantePago> listaFiltradaParticipantesFaltaPago;
     
     public EventoParticipanteBean() {
     }
@@ -39,6 +41,24 @@ public class EventoParticipanteBean implements Serializable{
 
     public void setListaFiltradaParticipantesEvento(List<EventoParticipantePago> listaFiltradaParticipantesEvento) {
         this.listaFiltradaParticipantesEvento = listaFiltradaParticipantesEvento;
+    }
+
+    public List<EventoParticipantePago> getListaParticipantesFaltaPago() {
+        EventoParticipantePagoContrato eventoParticipantePago =  new EventoParticipantePago();
+        listaParticipantesFaltaPago = eventoParticipantePago.ListarParticipantesPagoPendiente();
+        return listaParticipantesFaltaPago;
+    }
+
+    public void setListaParticipantesFaltaPago(List<EventoParticipantePago> listaParticipantesFaltaPago) {
+        this.listaParticipantesFaltaPago = listaParticipantesFaltaPago;
+    }
+
+    public List<EventoParticipantePago> getListaFiltradaParticipantesFaltaPago() {
+        return listaFiltradaParticipantesFaltaPago;
+    }
+
+    public void setListaFiltradaParticipantesFaltaPago(List<EventoParticipantePago> listaFiltradaParticipantesFaltaPago) {
+        this.listaFiltradaParticipantesFaltaPago = listaFiltradaParticipantesFaltaPago;
     }
     
     public void printPDFListaParticipantesEvento() throws JRException, IOException {

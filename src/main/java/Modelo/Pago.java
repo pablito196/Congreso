@@ -4,6 +4,7 @@ import Conexion.Conexion;
 import Conexion.Parametros;
 import Contratos.PagoContrato;
 import java.math.BigDecimal;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -90,6 +91,28 @@ public class Pago implements PagoContrato{
         parametros.add(new Parametros("_MontoPagado",pago.montoPagado));
         parametros.add(new Parametros("_Saldo",pago.saldo));
         con.Ejecutar("PaInsertarPago", parametros);
+    }
+
+    @Override
+    public List<Pago> Listar(int idParticipantePago) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEventoParticipante",idParticipantePago));
+        ResultSet listadoPagos = con.Listar("PaListarPagos",parametros); 
+        ArrayList<Pago> listaPagos = new ArrayList<Pago>();
+        try
+        {
+            while(listadoPagos.next())
+            {
+                listaPagos.add(new Pago(listadoPagos.getInt("IdPago"), listadoPagos.getInt("IdEventoParticipante"), listadoPagos.getDate("Fecha"), 
+                                        listadoPagos.getBigDecimal("MontoPagado"), listadoPagos.getBigDecimal("Saldo")));
+            }
+            
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return listaPagos;
     }
     
 }
