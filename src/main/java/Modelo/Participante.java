@@ -192,7 +192,7 @@ public class Participante implements ParticipanteContrato{
             {
                 _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"), 
                                                 datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"), 
-                                                datosParticipante.getString("Institucion"), telefono);
+                                                datosParticipante.getString("Institucion"), datosParticipante.getString("Telefono"));
                 
             }
             

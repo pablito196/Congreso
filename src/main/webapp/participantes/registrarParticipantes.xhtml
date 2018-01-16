@@ -45,10 +45,15 @@
                         <p:inputText value="#{participanteBean.participante.institucion}" class="cajaTexto"/>
                         <p:outputLabel for="cdFecha" value="Fecha de registro:" />
                         <p:calendar id="cdFecha" value="#{participanteBean.eventoParticipante.fechaRegistro}" locale="en" navigator="true" pattern="yyyy-MMM-dd"   size="15" class="cajaTexto"/>    
+                        <p:outputLabel value="Costo del evento:" /> 
+                        <p:inputText  value="#{participanteBean.eventoSeleccionado.costo}" class="cajaTexto" readonly="true"/>
                         <p:outputLabel value="Monto pagado:" /> 
-                        <p:inputText  value="#{participanteBean.montoPagado}" class="cajaTexto"/>
+                        <p:inputText  value="#{participanteBean.montoPagado}" class="cajaTexto">
+                            <p:ajax event="keyup" listener="#{participanteBean.calcularSaldo()}"
+                                    update=":formRegistroParticipantes:txtSaldo" />
+                        </p:inputText>
                         <p:outputLabel value="Saldo:" /> 
-                        <p:inputText  value="#{participanteBean.saldo}" class="cajaTexto"/>
+                        <p:inputText id="txtSaldo" value="#{participanteBean.saldo}" class="cajaTexto"/>
                         <p:outputLabel value="Nº de habitación:" /> 
                         <p:inputText value="#{participanteBean.eventoParticipante.numeroHabitacion}" class="cajaTexto"/>
                         <p:outputLabel for="cmbMonitor" value="Monitor:" />
@@ -57,9 +62,8 @@
                             <f:selectItems value="#{monitorBean.lstMonitores}" itemValue="#{monitorBean.monitor.idMonitor}" itemLabel="#{monitorBean.monitor.nombreMonitor}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="Observaciones:" /> 
-                        <p:inputText value="#{participanteBean.eventoParticipante.observaciones}" class="cajaTexto"/>
+                        <p:inputTextarea value="#{participanteBean.eventoParticipante.observaciones}" class="cajaTexto"/>
                     </p:panelGrid>
-                    <p:commandButton value="Nuevo" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
                     <p:commandButton value ="Guardar" actionListener="#{participanteBean.registroEventoParticipante()}" update=":formRegistroParticipantes"/>
                     <p:commandButton value="Cancelar" actionListener="#{eventoBean.limpiarEvento()}" update=":formRegistroParticipantes"/>
 
@@ -81,7 +85,7 @@
 
                             </p:column>
                         </p:dataTable>
-                        <p:commandButton value="Cerrar" onclick="PF('dialogProveedores').hide();" />
+                        <p:commandButton value="Cerrar" onclick="PF('dialogParticipantes').hide();" />
                     </p:dialog>
                     <!-- fin dialogParticipantes -->
                     <!--dialog para registrar participantes -->

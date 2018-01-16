@@ -29,6 +29,7 @@ public class ParticipanteBean implements Serializable {
     private Participante participante;
     private EventoParticipante eventoParticipante;
     private Pago pago;
+    private Evento eventoSeleccionado;
 
     private String ciParticipante;
     private BigDecimal montoPagado;
@@ -41,7 +42,7 @@ public class ParticipanteBean implements Serializable {
         pago = new Pago();
         ciParticipante = "";
         montoPagado = new BigDecimal(0);
-        saldo = new BigDecimal(0);
+        
         listaParticipantes = new ArrayList<>();
     }
 
@@ -119,6 +120,17 @@ public class ParticipanteBean implements Serializable {
         this.saldo = saldo;
     }
 
+    public Evento getEventoSeleccionado() {
+        EventoContrato eventoContrato = new Evento();
+        eventoSeleccionado = eventoContrato.EsSeleccionado();
+        saldo = eventoSeleccionado.getCosto();
+        return eventoSeleccionado;
+    }
+
+    public void setEventoSeleccionado(Evento eventoSeleccionado) {
+        this.eventoSeleccionado = eventoSeleccionado;
+    }
+
     //METODOS
     public void guardarParticipante() {
         ParticipanteContrato participanteContrato = new Participante();
@@ -181,8 +193,7 @@ public class ParticipanteBean implements Serializable {
                 pagoContrato.Guardar(pago);
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Participante registrado en el evento correctamente"));
                 nuevoRegistroParticipanteEvento();
-            }
-            else{
+            } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El participante ingresado ya se encuentra registrado en el evento"));
                 nuevoRegistroParticipanteEvento();
             }
@@ -190,13 +201,28 @@ public class ParticipanteBean implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Debe seleccionar un congreso"));
         }
     }
-    
-    public void nuevoRegistroParticipanteEvento()
-    {
+
+    public void nuevoRegistroParticipanteEvento() {
         participante = new Participante();
         eventoParticipante = new EventoParticipante();
         pago = new Pago();
         montoPagado = new BigDecimal(0);
         saldo = new BigDecimal(0);
     }
+
+    public void calcularSaldo() {
+        if (montoPagado != null) {
+            if (montoPagado.compareTo(BigDecimal.ZERO) == 0) {
+                saldo = eventoSeleccionado.getCosto();
+            } else {
+                saldo = eventoSeleccionado.getCosto().subtract(montoPagado);
+            }
+        }
+        else
+        {
+            saldo = eventoSeleccionado.getCosto();
+        }    
+        
+    }
+
 }
