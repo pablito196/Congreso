@@ -19,13 +19,11 @@
             <ui:insert name="top"></ui:insert>
             <h1>SISTEMA DE REGISTRO DE PARTICIPACIÓN EN EVENTOS</h1>
             <div id="sessionUsuario">
-                <h:form>
-                    <p:outputLabel value="Bienvenido: "/>
-                    <p:outputLabel value="#{loginBean.usuario.nombre}"/>
-                    <p:commandButton id="btnSalir" value="Salir" action="#{loginBean.cerrarSesion()}"/>
-                </h:form>
+
+                <p:outputLabel value="#{eventoBean.eventoSeleccionado.nombreEvento}" style="font-size: 25px"/>
+
             </div>
-            
+
         </div>
         <div>
             <div id="left">
@@ -36,7 +34,7 @@
                             <p:submenu label="Participantes">
                                 <p:menuitem value="Registro de participantes" outcome="/participantes/registrarParticipantes" />
                                 <p:menuitem value="Registro de monitores" outcome="/participantes/registrarMonitores" />
-                                
+
                             </p:submenu>
                             <p:submenu label="Informes">
                                 <p:menuitem value="Listado de participantes" outcome="/participantes/listadoParticipantes"/>

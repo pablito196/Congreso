@@ -136,13 +136,6 @@ public class Evento implements EventoContrato{
     }
 
     @Override
-    public void Seleccionar(Evento evento) {
-        parametros = new ArrayList<>();
-        parametros.add(new Parametros("_IdEvento",evento.idEvento));
-        con.Ejecutar("PaInsertarEvento", parametros);
-    }
-
-    @Override
     public void ModificarEvento(Evento evento) {
         parametros = new ArrayList<>();
         parametros.add(new Parametros("_IdEvento",evento.idEvento));

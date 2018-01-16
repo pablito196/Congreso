@@ -16,6 +16,7 @@ import javax.faces.view.ViewScoped;
 public class EventoBean implements Serializable{
 
     private Evento evento;
+    private Evento eventoSeleccionado;
     private List<SelectItem> lstEventos;
     List<Evento> listaEventos;
     
@@ -52,6 +53,16 @@ public class EventoBean implements Serializable{
             this.lstEventos.add(eventoItem);
         }
         return lstEventos;
+    }
+
+    public Evento getEventoSeleccionado() {
+       EventoContrato eventoContrato = new Evento();
+        eventoSeleccionado = eventoContrato.EsSeleccionado();
+        return eventoSeleccionado;
+    }
+
+    public void setEventoSeleccionado(Evento eventoSeleccionado) {
+        this.eventoSeleccionado = eventoSeleccionado;
     }
 
     
