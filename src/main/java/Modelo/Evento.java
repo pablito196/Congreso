@@ -175,5 +175,12 @@ public class Evento implements EventoContrato{
         }        
         return _evento;
     }
+
+    @Override
+    public void SeleccionarEvento(Evento evento) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEvento",evento.idEvento));
+        con.Ejecutar("PaSeleccionarEvento", parametros);
+    }
     
 }

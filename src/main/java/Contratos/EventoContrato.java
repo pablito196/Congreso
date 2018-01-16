@@ -9,4 +9,5 @@ public interface EventoContrato {
     public void Seleccionar(Evento evento);
     public void ModificarEvento(Evento evento);
     public Evento EsSeleccionado();
+    public void SeleccionarEvento(Evento evento);
 }
