@@ -5,6 +5,7 @@ import Modelo.EventoParticipante;
 import Modelo.EventoParticipantePago;
 import Modelo.Pago;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -19,13 +20,18 @@ import javax.faces.view.ViewScoped;
 public class PagoBean implements Serializable {
 
     private Pago pago;
+    private Pago ultimoPago;
     private EventoParticipantePago eventoParticipantePago;
     private List<Pago> listaPagosPendientes;
+    
+    private BigDecimal montoPagado;
+    private BigDecimal saldo;
 
     public PagoBean() {
         eventoParticipantePago = new EventoParticipantePago();
         listaPagosPendientes = new ArrayList<>();
         pago = new Pago();
+        montoPagado = new BigDecimal(0);
     }
 
     public EventoParticipantePago getEventoParticipantePago() {
@@ -54,6 +60,39 @@ public class PagoBean implements Serializable {
         this.listaPagosPendientes = listaPagosPendientes;
     }
 
+    public Pago getUltimoPago() {
+        //pago = new Pago();
+        ultimoPago = new Pago();
+        PagoContrato pagoContrato = new Pago();
+        ultimoPago = pagoContrato.UltimoPago(eventoParticipantePago.getIdEventoParticipante());
+        if (ultimoPago != null) {
+            
+            //pago.setSaldo(ultimoPago.getSaldo());
+            saldo = ultimoPago.getSaldo();
+        }
+        return ultimoPago;
+    }
+
+    public void setUltimoPago(Pago ultimoPago) {
+        this.ultimoPago = ultimoPago;
+    }
+
+    public BigDecimal getMontoPagado() {
+        return montoPagado;
+    }
+
+    public void setMontoPagado(BigDecimal montoPagado) {
+        this.montoPagado = montoPagado;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
+    }
+
     //METODOS
     public void guardarPago() {
         int idEventoParticipante = 0;
@@ -63,15 +102,33 @@ public class PagoBean implements Serializable {
         idEventoParticipante = eventoParticipantePago.getIdEventoParticipante();
         pago.setIdEventoParticipante(idEventoParticipante);
         pago.setFecha(fechahoy);
+        pago.setMontoPagado(montoPagado);
+        pago.setSaldo(saldo);
         pagoContrato.Guardar(pago);
         nuevoPago();
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Pago registrado correctamente"));
-        
+
     }
 
-    public void nuevoPago()
-    {
+    public void nuevoPago() {
         pago = new Pago();
+        montoPagado = new BigDecimal(0);
+        saldo = new BigDecimal(0);
+    }
+    
+    public void calcularSaldo() {
+        if (montoPagado != null) {
+            if (montoPagado.compareTo(BigDecimal.ZERO) == 0) {
+                saldo = ultimoPago.getSaldo();
+            } else {
+                saldo = ultimoPago.getSaldo().subtract(montoPagado);
+            }
+        }
+        else
+        {
+            saldo = ultimoPago.getSaldo();
+        }    
+        
     }
 
 }

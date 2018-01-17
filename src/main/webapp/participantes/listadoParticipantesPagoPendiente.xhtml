@@ -91,10 +91,15 @@
                         </p:dataTable>
                         <p:separator/>
                         <h:panelGrid id="gridDatosPago"  columns="2">
+                            <p:outputLabel value="Ultimo saldo:"/>
+                            <p:inputText value="#{pagoBean.ultimoPago.saldo}" class="cajaTexto" readonly="true"/>
                             <p:outputLabel value="Monto a pagar:"/>
-                            <p:inputText value="#{pagoBean.pago.montoPagado}" class="cajaTexto"/>
+                            <p:inputText value="#{pagoBean.montoPagado}" class="cajaTexto">
+                                <p:ajax event="keyup" listener="#{pagoBean.calcularSaldo()}"
+                                    update=":formPagar:txtSaldo" />
+                            </p:inputText>
                             <p:outputLabel value="Saldo:" /> 
-                            <p:inputText value="#{pagoBean.pago.saldo}" class="cajaTexto"/>
+                            <p:inputText id="txtSaldo" value="#{pagoBean.saldo}" class="cajaTexto"/>
                         </h:panelGrid>
                         <p:separator/>
                         <p:commandButton value ="Guardar" actionListener="#{pagoBean.guardarPago()}" update=":formAdministrarParticipantes" oncomplete="PF('dialogPagar').hide();" />

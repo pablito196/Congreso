@@ -114,5 +114,28 @@ public class Pago implements PagoContrato{
         }        
         return listaPagos;
     }
+
+    @Override
+    public Pago UltimoPago(int idEventoParticipante) {
+        Pago _pago = null;
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdEventoParticipante",idEventoParticipante));
+        ResultSet datosPago = con.Listar("PaBuscarUltimoPago", parametros); 
+        try
+        {
+            while(datosPago.next())
+            {
+                _pago = new Pago(datosPago.getInt("IdPago"), datosPago.getInt("IdEventoParticipante"), datosPago.getDate("Fecha"), 
+                                 datosPago.getBigDecimal("MontoPagado"), datosPago.getBigDecimal("Saldo"));
+                
+            }
+            
+        }
+        catch(Exception e)
+        {
+            System.err.println(e);
+        }        
+        return _pago;
+    }
     
 }
