@@ -66,7 +66,7 @@ public class EventoParticipanteBean implements Serializable{
         PdfPrint imprimirPdf = new PdfPrint();
         
         List<EventoParticipantePago> participantesEvento = new ArrayList<>();
-        participantesEvento = this.listaParticipantesEvento;
+        participantesEvento = this.listaFiltradaParticipantesEvento;
         String filename = "ListaParticipantesEvento.pdf";
         String JasperPath = "resources/reportes/ListaParticipantes.jasper";
         imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
