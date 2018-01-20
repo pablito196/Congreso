@@ -71,5 +71,15 @@ public class EventoParticipanteBean implements Serializable{
         String JasperPath = "resources/reportes/ListaParticipantes.jasper";
         imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
     }
+    public void printPDFListaParticipantesEventoFaltaPago() throws JRException, IOException {
+        
+        PdfPrint imprimirPdf = new PdfPrint();
+        
+        List<EventoParticipantePago> participantesEvento = new ArrayList<>();
+        participantesEvento = this.listaFiltradaParticipantesFaltaPago;
+        String filename = "ListaParticipantesDeudores.pdf";
+        String JasperPath = "resources/reportes/ListaParticipantesFaltaPago.jasper";
+        imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
+    }
     
 }
