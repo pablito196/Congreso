@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./../plantilla/plantilla.xhtml">
+
+            <ui:define name="content">
+                <h2>Listado de participantes con pago de evento pendiente</h2>
+
+                <h:form id="formAdministrarParticipantes" >
+                    <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
+
+                    <p:dataTable id="tablaParticipantes" paginator="true" paginatorPosition="top" 
+                                 var="_participante" value="#{eventoParticipanteBean.listaParticipantesFaltaPago}" emptyMessage="No hay datos de participantes" rows="15" widgetVar=""  filteredValue="#{eventoParticipanteBean.listaFiltradaParticipantesEvento}">
+                        <p:column headerText="IdParticipanteEvento" visible="false">
+                            <h:outputText value="#{_participante.idEventoParticipante}" />
+                        </p:column>
+                        <p:column headerText="CI" filterBy="#{_participante.ci}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.ci}" />
+                        </p:column>
+                        <p:column headerText="Participante" filterBy="#{_participante.nombreParticipante}" filterMatchMode="contains" style="width: 150px; text-align: center">
+                            <h:outputText value="#{_participante.nombreParticipante}" />
+                        </p:column>
+                        <p:column headerText="Ciudad" filterBy="#{_participante.ciudad}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.ciudad}" />
+                        </p:column>
+                        <p:column headerText="Teléfono" filterBy="#{_participante.telefono}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.telefono}" />
+                        </p:column>
+                        <p:column headerText="Institucion" filterBy="#{_participante.institucion}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.institucion}" />
+                        </p:column>
+                        <p:column headerText="Nº Habitación" filterBy="#{_participante.numeroHabitacion}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.numeroHabitacion}"  />
+                        </p:column>
+                        <p:column headerText="Fecha inscripción" filterBy="#{_participante.fechaRegistro}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.fechaRegistro}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Monitor" filterBy="#{_participante.nombreMonitor}" filterMatchMode="contains">
+                            <h:outputText value="#{_participante.nombreMonitor}" />
+                        </p:column>
+                        <p:column headerText="Monto" filterBy="#{_participante.montoPagado}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.montoPagado}" />
+                        </p:column>
+                        <p:column headerText="Saldo" filterBy="#{_participante.saldo}" filterMatchMode="contains" style="width: 80px; text-align: center">
+                            <h:outputText value="#{_participante.saldo}" />
+                        </p:column>
+                        <p:column headerText="Pagar">
+                            <p:commandButton value="Pagar" oncomplete="PF('dialogPagar').show();" >
+                                <f:setPropertyActionListener target="#{pagoBean.eventoParticipantePago}" value="#{_participante}"/>
+                            </p:commandButton>
+
+                        </p:column>
+                        
+                    </p:dataTable>
+                    <p:separator/>
+                    <h:commandLink id="btnImprimir" actionListener="#{eventoParticipanteBean.printPDFListaParticipantesEvento()}"  title="Vista previa" style="text-align: center">
+                            <p:graphicImage style="width:25px; text-align: center" url="/resources/images/pdf.png"/>
+
+                        </h:commandLink>
+
+                    
+                    <p:dialog id="dlPagar" widgetVar="dialogPagar" resizable="false" showEffect="explode" 
+                              hideEffect="explode" modal="true" header="Pago del evento">
+                        <h3>Lista de pagos</h3>
+                        <p:dataTable id="tablaPagos" paginator="true" paginatorPosition="top" style="width: 700px;"
+                                     var="_pago" value="#{pagoBean.listaPagosPendientes}" emptyMessage="No hay datos de pagos" rows="15" widgetVar="">
+
+                            <p:column headerText="IdPago" visible="false">
+                                <h:outputText value="#{_pago.idPago}" />
+                            </p:column>
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{_pago.fecha}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Monto Pagado">
+                                <h:outputText value="#{_pago.montoPagado}" />
+                            </p:column>
+                            <p:column headerText="Saldo">
+                                <h:outputText value="#{_pago.saldo}" />
+                            </p:column>
+
+                        </p:dataTable>
+                        <p:separator/>
+                        <h:panelGrid id="gridDatosPago"  columns="2">
+                            <p:outputLabel value="Ultimo saldo:"/>
+                            <p:inputText value="#{pagoBean.ultimoPago.saldo}" class="cajaTexto" readonly="true"/>
+                            <p:outputLabel value="Monto a pagar:"/>
+                            <p:inputText value="#{pagoBean.montoPagado}" class="cajaTexto">
+                                <p:ajax event="keyup" listener="#{pagoBean.calcularSaldo()}"
+                                    update=":formAdministrarParticipantes:txtSaldo" />
+                            </p:inputText>
+                            <p:outputLabel value="Saldo:" /> 
+                            <p:inputText id="txtSaldo" value="#{pagoBean.saldo}" class="cajaTexto"/>
+                        </h:panelGrid>
+                        <p:separator/>
+                        <p:commandButton value ="Guardar" actionListener="#{pagoBean.guardarPago()}" update=":formAdministrarParticipantes" oncomplete="PF('dialogPagar').hide();" />
+                        <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('dialogPagar').hide();" />
+                    </p:dialog>
+                    
+                </h:form>
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

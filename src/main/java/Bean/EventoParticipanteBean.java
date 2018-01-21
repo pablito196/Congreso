@@ -21,6 +21,8 @@ public class EventoParticipanteBean implements Serializable{
     private List<EventoParticipantePago> listaFiltradaParticipantesEvento;
     private List<EventoParticipantePago> listaParticipantesFaltaPago;
     private List<EventoParticipantePago> listaFiltradaParticipantesFaltaPago;
+    private List<EventoParticipantePago> listaParticipantesPagoCompleto;
+    private List<EventoParticipantePago> listaFiltradaParticipantesPagoCompleto;
     
     public EventoParticipanteBean() {
     }
@@ -60,6 +62,26 @@ public class EventoParticipanteBean implements Serializable{
     public void setListaFiltradaParticipantesFaltaPago(List<EventoParticipantePago> listaFiltradaParticipantesFaltaPago) {
         this.listaFiltradaParticipantesFaltaPago = listaFiltradaParticipantesFaltaPago;
     }
+
+    public List<EventoParticipantePago> getListaParticipantesPagoCompleto() {
+        EventoParticipantePagoContrato eventoParticipantePago =  new EventoParticipantePago();
+        listaParticipantesPagoCompleto = eventoParticipantePago.ListarParticipantesCompletoPago();
+        return listaParticipantesPagoCompleto;
+    }
+
+    public void setListaParticipantesPagoCompleto(List<EventoParticipantePago> listaParticipantesPagoCompleto) {
+        this.listaParticipantesPagoCompleto = listaParticipantesPagoCompleto;
+    }
+
+    public List<EventoParticipantePago> getListaFiltradaParticipantesPagoCompleto() {
+        return listaFiltradaParticipantesPagoCompleto;
+    }
+
+    public void setListaFiltradaParticipantesPagoCompleto(List<EventoParticipantePago> listaFiltradaParticipantesPagoCompleto) {
+        this.listaFiltradaParticipantesPagoCompleto = listaFiltradaParticipantesPagoCompleto;
+    }
+    
+    
     
     public void printPDFListaParticipantesEvento() throws JRException, IOException {
         
@@ -79,6 +101,23 @@ public class EventoParticipanteBean implements Serializable{
         participantesEvento = this.listaFiltradaParticipantesFaltaPago;
         String filename = "ListaParticipantesDeudores.pdf";
         String JasperPath = "resources/reportes/ListaParticipantesFaltaPago.jasper";
+        imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
+    }
+    public void printPDFListaParticipantesEventoPagoCompleto() throws JRException, IOException {
+        
+        PdfPrint imprimirPdf = new PdfPrint();
+        
+        List<EventoParticipantePago> participantesEvento = new ArrayList<>();
+        if(listaFiltradaParticipantesPagoCompleto == null)
+        {
+            participantesEvento = this.listaParticipantesPagoCompleto;
+        }
+        else
+        {
+            participantesEvento = this.listaFiltradaParticipantesPagoCompleto;
+        }
+        String filename = "ListaParticipantesPagoCompleto.pdf";
+        String JasperPath = "resources/reportes/ListaParticipantesPagoCompleto.jasper";
         imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
     }
     
