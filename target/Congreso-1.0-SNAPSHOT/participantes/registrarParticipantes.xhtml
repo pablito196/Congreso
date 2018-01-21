@@ -70,7 +70,7 @@
                     <!--dialog para mostrar participantes -->
                     <p:dialog id="dlgParticipantes" widgetVar="dialogParticipantes" modal="true" resizable="false"
                               showEffect="explode" hideEffect="explode" >
-                        <p:dataTable id="tablaProveedores" paginator="true" paginatorPosition="top" style="width: 700px;"
+                        <p:dataTable id="tablaParticipantes" paginator="true" paginatorPosition="top" style="width: 700px;"
                                      var="_participante" value="#{participanteBean.listaParticipantes}" emptyMessage="No hay datos de participantes" rows="15" widgetVar=""  filteredValue="#{participanteBean.listaFiltradaParticipantes}">
                             <p:column headerText="Ci" filterBy="#{_participante.ci}" filterMatchMode="contains">
                                 <h:outputText value="#{_participante.ci}" />

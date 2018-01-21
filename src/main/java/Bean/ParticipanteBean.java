@@ -25,6 +25,8 @@ public class ParticipanteBean implements Serializable {
 
     private List<Participante> listaParticipantes;
     private List<Participante> listaFiltradaParticipantes;
+    private List<Participante> listaCompletaParticipantes;
+    private List<Participante> listaFiltradaCompletaParticipantes;
     private Evento evento;
     private Participante participante;
     private EventoParticipante eventoParticipante;
@@ -44,6 +46,7 @@ public class ParticipanteBean implements Serializable {
         montoPagado = new BigDecimal(0);
         
         listaParticipantes = new ArrayList<>();
+        listaCompletaParticipantes =  new ArrayList<>();
     }
 
     public Evento getEvento() {
@@ -88,7 +91,7 @@ public class ParticipanteBean implements Serializable {
 
     public List<Participante> getListaParticipantes() {
         ParticipanteContrato participanteContrato = new Participante();
-        listaParticipantes = participanteContrato.ListarParticipantes();
+        listaParticipantes = participanteContrato.ListarParticipantesActivos();
         return listaParticipantes;
     }
 
@@ -129,6 +132,24 @@ public class ParticipanteBean implements Serializable {
 
     public void setEventoSeleccionado(Evento eventoSeleccionado) {
         this.eventoSeleccionado = eventoSeleccionado;
+    }
+
+    public List<Participante> getListaCompletaParticipantes() {
+        ParticipanteContrato participanteContrato = new Participante();
+        listaCompletaParticipantes = participanteContrato.ListarParticipantes();
+        return listaCompletaParticipantes;
+    }
+
+    public void setListaCompletaParticipantes(List<Participante> listaCompletaParticipantes) {
+        this.listaCompletaParticipantes = listaCompletaParticipantes;
+    }
+
+    public List<Participante> getListaFiltradaCompletaParticipantes() {
+        return listaFiltradaCompletaParticipantes;
+    }
+
+    public void setListaFiltradaCompletaParticipantes(List<Participante> listaFiltradaCompletaParticipantes) {
+        this.listaFiltradaCompletaParticipantes = listaFiltradaCompletaParticipantes;
     }
 
     //METODOS
@@ -225,4 +246,9 @@ public class ParticipanteBean implements Serializable {
         
     }
 
+    public void modificarParticipante() {
+        ParticipanteContrato participanteContrato = new Participante();
+       participanteContrato.ModificarParticipante(participante);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Persona modificada correctamente"));
+    }
 }

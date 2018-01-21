@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Versión del servidor:         5.5.27 - MySQL Community Server (GPL)
+-- Versión del servidor:         5.5.27-log - MySQL Community Server (GPL)
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             9.4.0.5142
 -- --------------------------------------------------------
@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `evento` (
 DELETE FROM `evento`;
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
 INSERT INTO `evento` (`IdEvento`, `NombreEvento`, `Lugar`, `FechaInicio`, `FechaFin`, `Costo`, `Descripcion`, `Seleccionado`) VALUES
-	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-31 00:00:00', 100.00, 'Primer Congreso de jovenes cristianos', b'0'),
-	(2, 'Congreso nacional de misiones', 'Villa bolivariana', '2018-01-09 00:00:00', '2018-01-23 00:00:00', 150.00, 'Incluye hospedaje para todos los participantes', b'1'),
+	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-31 00:00:00', 100.00, 'Primer Congreso de jovenes cristianos', b'1'),
+	(2, 'Congreso nacional de misiones', 'Villa bolivariana', '2018-01-09 00:00:00', '2018-01-23 00:00:00', 150.00, 'Incluye hospedaje para todos los participantes', b'0'),
 	(3, 'Conferencia de misiones Sucre', 'Teatro Gran Mariscal', '2018-01-15 00:00:00', '2018-01-20 00:00:00', 200.00, 'Ninguna', b'0');
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
 
@@ -57,9 +57,9 @@ CREATE TABLE IF NOT EXISTS `eventoparticipante` (
   CONSTRAINT `eventoparticipante_evento_fk` FOREIGN KEY (`IdEvento`) REFERENCES `evento` (`IdEvento`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `eventoparticipante_monitor_fk` FOREIGN KEY (`IdMonitor`) REFERENCES `monitor` (`IdMonitor`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `eventoparticipante_participante_fk` FOREIGN KEY (`IdParticipante`) REFERENCES `participante` (`IdParticipante`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.eventoparticipante: ~21 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.eventoparticipante: ~24 rows (aproximadamente)
 DELETE FROM `eventoparticipante`;
 /*!40000 ALTER TABLE `eventoparticipante` DISABLE KEYS */;
 INSERT INTO `eventoparticipante` (`IdEventoParticipante`, `IdEvento`, `IdParticipante`, `IdMonitor`, `FechaRegistro`, `NumeroHabitacion`, `Observaciones`) VALUES
@@ -83,7 +83,10 @@ INSERT INTO `eventoparticipante` (`IdEventoParticipante`, `IdEvento`, `IdPartici
 	(20, 1, 7, 1, '2018-01-13 00:00:00', '35', 'Saldo de 20 Bs.'),
 	(21, 2, 7, 2, '2018-01-16 00:00:00', '12', 'Ninguna'),
 	(22, 2, 3, 2, '2018-01-16 00:00:00', '2', 'Ninguna'),
-	(23, 2, 8, 2, '2018-01-16 00:00:00', '2', 'ninguna');
+	(23, 2, 8, 2, '2018-01-16 00:00:00', '2', 'ninguna'),
+	(24, 3, 7, 3, '2018-01-18 00:00:00', '12', ''),
+	(25, 1, 9, 2, '2018-01-18 00:00:00', '45', ''),
+	(26, 1, 10, 3, '2018-01-18 00:00:00', '12', '');
 /*!40000 ALTER TABLE `eventoparticipante` ENABLE KEYS */;
 
 -- Volcando estructura para vista congreso.listaeventoparticipante
@@ -147,7 +150,8 @@ CREATE TABLE `listaparticipantes` (
 	`Direccion` VARCHAR(150) NULL COLLATE 'utf8_general_ci',
 	`CorreoElectronico` VARCHAR(300) NULL COLLATE 'utf8_general_ci',
 	`Telefono` VARCHAR(15) NULL COLLATE 'utf8_general_ci',
-	`Institucion` VARCHAR(500) NULL COLLATE 'utf8_general_ci'
+	`Institucion` VARCHAR(500) NULL COLLATE 'utf8_general_ci',
+	`EsEliminado` BIT(1) NULL
 ) ENGINE=MyISAM;
 
 -- Volcando estructura para vista congreso.listaparticipantesevento
@@ -187,6 +191,18 @@ INSERT INTO `monitor` (`IdMonitor`, `CI`, `NombreMonitor`, `Institucion`, `Direc
 	(2, '4111117', 'Esteban Fernandez', 'MCC', 'Junin #56', '6478944'),
 	(3, '7894561', 'Jose Luis Coronado', 'Asambleas de Dios', 'Junin 23', '6478945');
 /*!40000 ALTER TABLE `monitor` ENABLE KEYS */;
+
+-- Volcando estructura para procedimiento congreso.PaActivarParticipante
+DROP PROCEDURE IF EXISTS `PaActivarParticipante`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaActivarParticipante`(
+	in _IdParticipante int
+)
+BEGIN
+ update participante set EsEliminado = 0
+	where IdParticipante = _IdParticipante;
+END//
+DELIMITER ;
 
 -- Volcando estructura para procedimiento congreso.PaBuscarEventoSeleccionado
 DROP PROCEDURE IF EXISTS `PaBuscarEventoSeleccionado`;
@@ -236,6 +252,18 @@ limit 1;
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento congreso.PaDesactivarParticipante
+DROP PROCEDURE IF EXISTS `PaDesactivarParticipante`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaDesactivarParticipante`(
+	in _IdParticipante int
+)
+BEGIN
+	update participante set EsEliminado = 1
+	where IdParticipante = _IdParticipante;
+END//
+DELIMITER ;
+
 -- Volcando estructura para tabla congreso.pago
 DROP TABLE IF EXISTS `pago`;
 CREATE TABLE IF NOT EXISTS `pago` (
@@ -247,9 +275,9 @@ CREATE TABLE IF NOT EXISTS `pago` (
   PRIMARY KEY (`IdPago`),
   KEY `IdEventoParticipante` (`IdEventoParticipante`),
   CONSTRAINT `pago_eventoparticipante_fk` FOREIGN KEY (`IdEventoParticipante`) REFERENCES `eventoparticipante` (`IdEventoParticipante`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.pago: ~15 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.pago: ~23 rows (aproximadamente)
 DELETE FROM `pago`;
 /*!40000 ALTER TABLE `pago` DISABLE KEYS */;
 INSERT INTO `pago` (`IdPago`, `IdEventoParticipante`, `Fecha`, `MontoPagado`, `Saldo`) VALUES
@@ -267,7 +295,15 @@ INSERT INTO `pago` (`IdPago`, `IdEventoParticipante`, `Fecha`, `MontoPagado`, `S
 	(12, 23, '2018-01-16 00:00:00', 20.00, 30.00),
 	(13, 22, '2018-01-17 00:00:00', 20.00, 43.00),
 	(14, 23, '2018-01-17 00:00:00', 10.00, 20.00),
-	(15, 22, '2018-01-17 00:00:00', 43.00, 0.00);
+	(15, 22, '2018-01-17 00:00:00', 43.00, 0.00),
+	(16, 20, '2018-01-18 00:00:00', 5.00, 5.00),
+	(17, 24, '2018-01-18 00:00:00', 100.00, 100.00),
+	(18, 20, '2018-01-18 00:00:00', 3.00, 2.00),
+	(19, 20, '2018-01-18 00:00:00', 2.00, 0.00),
+	(20, 25, '2018-01-18 00:00:00', 25.00, 75.00),
+	(21, 26, '2018-01-18 00:00:00', 50.00, 50.00),
+	(22, 25, '2018-01-18 00:00:00', 12.00, 63.00),
+	(23, 25, '2018-01-18 00:00:00', 21.00, 42.00);
 /*!40000 ALTER TABLE `pago` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento congreso.PaInsertarEvento
@@ -397,6 +433,26 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Volcando estructura para procedimiento congreso.PaListarParticipantesPagoCompleto
+DROP PROCEDURE IF EXISTS `PaListarParticipantesPagoCompleto`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaListarParticipantesPagoCompleto`()
+BEGIN
+select listaparticipantesevento.IdEventoParticipante, listaparticipantesevento.CI, 
+	listaparticipantesevento.NombreParticipante, listaparticipantesevento.Ciudad, 
+	listaparticipantesevento.Telefono, listaparticipantesevento.Institucion, 
+	listaparticipantesevento.NumeroHabitacion, listaparticipantesevento.FechaRegistro, 
+	listaparticipantesevento.NombreMonitor,listaparticipantesevento.MontoPagado, 
+	listaparticipantesevento.Saldo
+	from listaparticipantesevento, listaeventoparticipante, listaeventos
+	where listaparticipantesevento.IdEventoParticipante = listaeventoparticipante.IdEventoParticipante
+	and listaeventoparticipante.IdEvento = listaeventos.IdEvento
+	and listaeventos.Seleccionado = 1
+	and listaparticipantesevento.Saldo <= 0
+	order by listaparticipantesevento.Institucion asc, listaparticipantesevento.NombreParticipante asc;
+END//
+DELIMITER ;
+
 -- Volcando estructura para procedimiento congreso.PaListarParticipantesPagoPendiente
 DROP PROCEDURE IF EXISTS `PaListarParticipantesPagoPendiente`;
 DELIMITER //
@@ -414,6 +470,16 @@ BEGIN
 	and listaeventos.Seleccionado = 1
 	and listaparticipantesevento.Saldo > 0
 	order by listaparticipantesevento.Institucion asc, listaparticipantesevento.NombreParticipante asc;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaListarParticipantesVigentes
+DROP PROCEDURE IF EXISTS `PaListarParticipantesVigentes`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaListarParticipantesVigentes`()
+BEGIN
+	select * from listaparticipantes
+	order by NombreParticipante asc;
 END//
 DELIMITER ;
 
@@ -435,6 +501,27 @@ BEGIN
 			FechaFin = _FechaFin, Costo = _Costo,
 			Descripcion = _Descripcion
 	where IdEvento = _IdEvento;
+END//
+DELIMITER ;
+
+-- Volcando estructura para procedimiento congreso.PaModificarParticipante
+DROP PROCEDURE IF EXISTS `PaModificarParticipante`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `PaModificarParticipante`(
+	IN _IdParticipante int,
+	IN _Ci varchar(10),
+	IN _NombreParticipante varchar(500),
+	IN _Ciudad varchar(50),
+	IN _CorreoElectronico varchar(300),
+	IN _Direccion varchar(150),
+	IN _Institucion varchar(500),
+	IN _Telefono varchar(15)
+)
+BEGIN
+	update participante set CI = _Ci, NombreParticipante = _NombreParticipante,
+		Ciudad = _Ciudad, CorreoElectronico = _CorreoElectronico,
+		Direccion = _Direccion, Institucion = _Institucion, Telefono = _Telefono
+	where IdParticipante = _IdParticipante; 
 END//
 DELIMITER ;
 
@@ -468,21 +555,22 @@ CREATE TABLE IF NOT EXISTS `participante` (
   `CorreoElectronico` varchar(300) DEFAULT NULL,
   `Telefono` varchar(15) DEFAULT NULL,
   `Institucion` varchar(500) DEFAULT NULL,
+  `EsEliminado` bit(1) DEFAULT b'0',
   PRIMARY KEY (`IdParticipante`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla congreso.participante: ~8 rows (aproximadamente)
 DELETE FROM `participante`;
 /*!40000 ALTER TABLE `participante` DISABLE KEYS */;
-INSERT INTO `participante` (`IdParticipante`, `CI`, `NombreParticipante`, `Ciudad`, `Direccion`, `CorreoElectronico`, `Telefono`, `Institucion`) VALUES
-	(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(2, '4103785', 'Jose Flores', '', '', '', '', ''),
-	(3, '5678941', 'Jorge Perez', 'Sucre', 'Pando #49', 'jorge@gmail.com', '6478954', 'MCC'),
-	(4, '', '', '', '', '', '', ''),
-	(5, '', '', '', '', '', '', ''),
-	(6, '7894561', 'Luis Lopez', 'Sucre', 'Av. Jaime Mendoza', 'luis@gmail.com', '6478945', 'MCC'),
-	(7, '4103650', 'Juan Pablo Cordero Romero', 'Sucre', 'Pando 49', 'jpablo.cordero.r@gmail.com', '73469213', 'MCC'),
-	(8, '6665130', 'Emilce Herrera', 'Sucre', 'Pando #49', 'emilce@gmail.com', '73421991', 'MCC');
+INSERT INTO `participante` (`IdParticipante`, `CI`, `NombreParticipante`, `Ciudad`, `Direccion`, `CorreoElectronico`, `Telefono`, `Institucion`, `EsEliminado`) VALUES
+	(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0'),
+	(2, '4103785', 'Jose Flores', '', '', '', '', '', b'0'),
+	(3, '5678941', 'Jorge Perez', 'Sucre', 'Pando #49', 'jorge@gmail.com', '6478954', 'MCC', b'0'),
+	(6, '7894561', 'Luis Lopez', 'Sucre', 'Av. Jaime Mendoza', 'luis@gmail.com', '6478945', 'MCC', b'0'),
+	(7, '4103650', 'Juan Pablo Cordero Romero', 'Sucre', 'Pando 49', 'jpablo.cordero.r@gmail.com', '73469213', 'MCC', b'0'),
+	(8, '6665130', 'Emilce Herrera', 'Sucre', 'Pando #49', 'emilce@gmail.com', '73421991', 'MCC', b'0'),
+	(9, '1028475', 'Crispin', 'Potosi', '', '', '', '', b'0'),
+	(10, '1085287', 'Juan Carlos', 'Yacuiba', '', '', '', '', b'0');
 /*!40000 ALTER TABLE `participante` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento congreso.PaSeleccionarEvento
@@ -525,7 +613,18 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP VIEW IF EXISTS `listaparticipantes`;
 -- Eliminando tabla temporal y crear estructura final de VIEW
 DROP TABLE IF EXISTS `listaparticipantes`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `listaparticipantes` AS select * from participante ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `listaparticipantes` AS select 
+        `participante`.`IdParticipante` AS `IdParticipante`,
+        `participante`.`CI` AS `CI`,
+        `participante`.`NombreParticipante` AS `NombreParticipante`,
+        `participante`.`Ciudad` AS `Ciudad`,
+        `participante`.`Direccion` AS `Direccion`,
+        `participante`.`CorreoElectronico` AS `CorreoElectronico`,
+        `participante`.`Telefono` AS `Telefono`,
+        `participante`.`Institucion` AS `Institucion`,
+		`participante`.`EsEliminado` AS `EsEliminado`
+    from
+        `participante` ;
 
 -- Volcando estructura para vista congreso.listaparticipantesevento
 DROP VIEW IF EXISTS `listaparticipantesevento`;

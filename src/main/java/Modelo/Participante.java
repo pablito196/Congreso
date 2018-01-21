@@ -17,7 +17,7 @@ public class Participante implements ParticipanteContrato{
     private String direccion;
     private String institucion;
     private String telefono;
-    
+    private boolean esEliminado;
     
     
     private final Conexion con = new Conexion();
@@ -37,6 +37,19 @@ public class Participante implements ParticipanteContrato{
         this.institucion = institucion;
         this.telefono = telefono;
         
+        
+    }
+    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion, 
+            String institucion, String telefono, boolean esEliminado) {
+        this.idParticipante = idParticipante;
+        this.ci = ci;
+        this.nombreParticipante = nombreParticipante;
+        this.ciudad = ciudad;
+        this.correoElectronico = correoElectronico;
+        this.direccion = direccion;
+        this.institucion = institucion;
+        this.telefono = telefono;
+        this.esEliminado = esEliminado;
         
     }
 
@@ -104,6 +117,14 @@ public class Participante implements ParticipanteContrato{
         this.telefono = telefono;
     }
 
+    public boolean isEsEliminado() {
+        return esEliminado;
+    }
+
+    public void setEsEliminado(boolean esEliminado) {
+        this.esEliminado = esEliminado;
+    }
+
       
     @Override
     public int GuardarParticipante(Participante participante) {
@@ -147,7 +168,7 @@ public class Participante implements ParticipanteContrato{
 
                 listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"), 
                                                         listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"), 
-                                                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono")));
+                                                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono"),listadoParticipantes.getBoolean("EsEliminado")));
                 
             }
         } catch (Exception e) {
@@ -202,6 +223,39 @@ public class Participante implements ParticipanteContrato{
             System.err.println(e);
         }        
         return _participante;
+    }
+
+    @Override
+    public List<Participante> ListarParticipantesActivos() {
+        ResultSet listadoParticipantes = con.Listar("PaListarParticipantesVigentes");
+
+        ArrayList<Participante> listaParticipantes = new ArrayList<Participante>();
+        try {
+            while (listadoParticipantes.next()) {
+
+                listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"), 
+                                                        listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"), 
+                                                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono")));
+                
+            }
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+        return listaParticipantes;
+    }
+
+    @Override
+    public void ModificarParticipante(Participante participante) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdParticipante",participante.idParticipante));
+        parametros.add(new Parametros("_Ci",participante.ci));
+        parametros.add(new Parametros("_NombreParticipante",participante.nombreParticipante));
+        parametros.add(new Parametros("_Ciudad",participante.ciudad));
+        parametros.add(new Parametros("_CorreoElectronico",participante.correoElectronico));
+        parametros.add(new Parametros("_Direccion",participante.direccion));
+        parametros.add(new Parametros("_Institucion",participante.institucion));
+        parametros.add(new Parametros("_Telefono",participante.telefono));
+        con.Ejecutar("PaModificarParticipante", parametros);
     }
     
 }
