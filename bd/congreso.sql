@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS `evento` (
 DELETE FROM `evento`;
 /*!40000 ALTER TABLE `evento` DISABLE KEYS */;
 INSERT INTO `evento` (`IdEvento`, `NombreEvento`, `Lugar`, `FechaInicio`, `FechaFin`, `Costo`, `Descripcion`, `Seleccionado`) VALUES
-	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-31 00:00:00', 100.00, 'Primer Congreso de jovenes cristianos', b'1'),
-	(2, 'Congreso nacional de misiones', 'Villa bolivariana', '2018-01-09 00:00:00', '2018-01-23 00:00:00', 150.00, 'Incluye hospedaje para todos los participantes', b'0'),
+	(1, 'Congreso de jóvenes', 'Villa Bolivariana', '2018-01-27 00:00:00', '2018-01-31 00:00:00', 100.00, 'Primer Congreso de jovenes cristianos', b'0'),
+	(2, 'Congreso nacional de misiones', 'Villa bolivariana', '2018-01-09 00:00:00', '2018-01-23 00:00:00', 150.00, 'Incluye hospedaje para todos los participantes', b'1'),
 	(3, 'Conferencia de misiones Sucre', 'Teatro Gran Mariscal', '2018-01-15 00:00:00', '2018-01-20 00:00:00', 200.00, 'Ninguna', b'0');
 /*!40000 ALTER TABLE `evento` ENABLE KEYS */;
 
@@ -88,6 +88,24 @@ INSERT INTO `eventoparticipante` (`IdEventoParticipante`, `IdEvento`, `IdPartici
 	(25, 1, 9, 2, '2018-01-18 00:00:00', '45', ''),
 	(26, 1, 10, 3, '2018-01-18 00:00:00', '12', '');
 /*!40000 ALTER TABLE `eventoparticipante` ENABLE KEYS */;
+
+-- Volcando estructura para tabla congreso.gasto
+DROP TABLE IF EXISTS `gasto`;
+CREATE TABLE IF NOT EXISTS `gasto` (
+  `IdGasto` int(11) NOT NULL AUTO_INCREMENT,
+  `Concepto` varchar(800) DEFAULT NULL,
+  `FechaGasto` datetime DEFAULT NULL,
+  `Monto` decimal(11,2) DEFAULT NULL,
+  `IdEvento` int(11) DEFAULT NULL,
+  PRIMARY KEY (`IdGasto`),
+  KEY `IdEvento` (`IdEvento`),
+  CONSTRAINT `gasto_evento_fk` FOREIGN KEY (`IdEvento`) REFERENCES `evento` (`IdEvento`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Volcando datos para la tabla congreso.gasto: ~0 rows (aproximadamente)
+DELETE FROM `gasto`;
+/*!40000 ALTER TABLE `gasto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `gasto` ENABLE KEYS */;
 
 -- Volcando estructura para vista congreso.listaeventoparticipante
 DROP VIEW IF EXISTS `listaeventoparticipante`;
@@ -275,9 +293,9 @@ CREATE TABLE IF NOT EXISTS `pago` (
   PRIMARY KEY (`IdPago`),
   KEY `IdEventoParticipante` (`IdEventoParticipante`),
   CONSTRAINT `pago_eventoparticipante_fk` FOREIGN KEY (`IdEventoParticipante`) REFERENCES `eventoparticipante` (`IdEventoParticipante`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla congreso.pago: ~23 rows (aproximadamente)
+-- Volcando datos para la tabla congreso.pago: ~30 rows (aproximadamente)
 DELETE FROM `pago`;
 /*!40000 ALTER TABLE `pago` DISABLE KEYS */;
 INSERT INTO `pago` (`IdPago`, `IdEventoParticipante`, `Fecha`, `MontoPagado`, `Saldo`) VALUES
@@ -303,7 +321,14 @@ INSERT INTO `pago` (`IdPago`, `IdEventoParticipante`, `Fecha`, `MontoPagado`, `S
 	(20, 25, '2018-01-18 00:00:00', 25.00, 75.00),
 	(21, 26, '2018-01-18 00:00:00', 50.00, 50.00),
 	(22, 25, '2018-01-18 00:00:00', 12.00, 63.00),
-	(23, 25, '2018-01-18 00:00:00', 21.00, 42.00);
+	(23, 25, '2018-01-18 00:00:00', 21.00, 42.00),
+	(24, 26, '2018-01-22 00:00:00', 42.00, 8.00),
+	(25, 25, '2018-01-22 00:00:00', 5.00, 37.00),
+	(26, 25, '2018-01-22 00:00:00', 5.00, 32.00),
+	(27, 25, '2018-01-22 00:00:00', 8.00, 24.00),
+	(28, 25, '2018-01-22 00:00:00', 4.00, 20.00),
+	(29, 25, '2018-01-22 00:00:00', 2.00, 18.00),
+	(30, 24, '2018-01-22 00:00:00', 40.00, 60.00);
 /*!40000 ALTER TABLE `pago` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento congreso.PaInsertarEvento
@@ -479,6 +504,7 @@ DELIMITER //
 CREATE DEFINER=`root`@`localhost` PROCEDURE `PaListarParticipantesVigentes`()
 BEGIN
 	select * from listaparticipantes
+	where EsEliminado = 0
 	order by NombreParticipante asc;
 END//
 DELIMITER ;
@@ -563,14 +589,14 @@ CREATE TABLE IF NOT EXISTS `participante` (
 DELETE FROM `participante`;
 /*!40000 ALTER TABLE `participante` DISABLE KEYS */;
 INSERT INTO `participante` (`IdParticipante`, `CI`, `NombreParticipante`, `Ciudad`, `Direccion`, `CorreoElectronico`, `Telefono`, `Institucion`, `EsEliminado`) VALUES
-	(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0'),
-	(2, '4103785', 'Jose Flores', '', '', '', '', '', b'0'),
+	(1, '4015789', 'Juan Manuel Llanos Serrudo', 'La Paz', 'Av. Ostria Gutierrez s/n', 'manu_llanos@gmail.com', '64789456', 'Asambleas de Dios', b'1'),
+	(2, '4103785', 'Jose Flores', 'La Paz', 'Av. del Estudiante 300', 'flores_jose@latinmail.com', '78945612', 'CCU', b'0'),
 	(3, '5678941', 'Jorge Perez', 'Sucre', 'Pando #49', 'jorge@gmail.com', '6478954', 'MCC', b'0'),
-	(6, '7894561', 'Luis Lopez', 'Sucre', 'Av. Jaime Mendoza', 'luis@gmail.com', '6478945', 'MCC', b'0'),
+	(6, '7894561', 'Luis Lopez Perez', 'Sucre', 'Av. Jaime Mendoza', 'luis@gmail.com', '6478945', 'MCC', b'0'),
 	(7, '4103650', 'Juan Pablo Cordero Romero', 'Sucre', 'Pando 49', 'jpablo.cordero.r@gmail.com', '73469213', 'MCC', b'0'),
-	(8, '6665130', 'Emilce Herrera', 'Sucre', 'Pando #49', 'emilce@gmail.com', '73421991', 'MCC', b'0'),
-	(9, '1028475', 'Crispin', 'Potosi', '', '', '', '', b'0'),
-	(10, '1085287', 'Juan Carlos', 'Yacuiba', '', '', '', '', b'0');
+	(8, '6665130', 'Emilce Herrera Santa Cruz', 'Sucre', 'Pando #49', 'emilce@gmail.com', '73421991', 'MCC', b'0'),
+	(9, '1028475', 'Crispin Fernandez Gonzales', 'Potosi', 'Hoyos #57', 'fernandez@gmail.com', '6478945', 'CCU', b'0'),
+	(10, '1085287', 'Juan Carlos Valdivia', 'Yacuiba', 'Bolivar #71', 'valdivia@hotmail.com', '78945612', 'Asambleas de Dios', b'1');
 /*!40000 ALTER TABLE `participante` ENABLE KEYS */;
 
 -- Volcando estructura para procedimiento congreso.PaSeleccionarEvento
