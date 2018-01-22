@@ -54,61 +54,42 @@
                             <h:outputText value="#{_participante.saldo}" />
                         </p:column>
                         <p:column headerText="Pagar">
-                            <p:commandButton value="Pagar" oncomplete="PF('dialogPagar').show();" >
-                                <f:setPropertyActionListener target="#{pagoBean.eventoParticipantePago}" value="#{_participante}"/>
+                            <p:commandButton value="Pagar" oncomplete="PF('dialogPagar').show();"  update=":formPagar">
+                                <f:setPropertyActionListener target="#{pagoBean.eventoParticipantePago}" value="#{_participante}" />
                             </p:commandButton>
 
                         </p:column>
-                        
+
                     </p:dataTable>
-                    <p:separator/>
-                    <h:commandLink id="btnImprimir" actionListener="#{eventoParticipanteBean.printPDFListaParticipantesEvento()}"  title="Vista previa" style="text-align: center">
-                            <p:graphicImage style="width:25px; text-align: center" url="/resources/images/pdf.png"/>
 
-                        </h:commandLink>
+                </h:form>
+                <p:separator/>
+                <h:form>
+                    <h:commandLink id="btnImprimir" actionListener="#{eventoParticipanteBean.printPDFListaParticipantesEventoFaltaPago()}"  title="Vista previa" style="text-align: center">
+                        <p:graphicImage style="width:25px; text-align: center" url="/resources/images/pdf.png"/>
 
-                    
+                    </h:commandLink>
+                </h:form>
+                <h:form id="formPagar">
                     <p:dialog id="dlPagar" widgetVar="dialogPagar" resizable="false" showEffect="explode" 
-                              hideEffect="explode" modal="true" header="Pago del evento">
-                        <h3>Lista de pagos</h3>
-                        <p:dataTable id="tablaPagos" paginator="true" paginatorPosition="top" style="width: 700px;"
-                                     var="_pago" value="#{pagoBean.listaPagosPendientes}" emptyMessage="No hay datos de pagos" rows="15" widgetVar="">
-
-                            <p:column headerText="IdPago" visible="false">
-                                <h:outputText value="#{_pago.idPago}" />
-                            </p:column>
-                            <p:column headerText="Fecha">
-                                <h:outputText value="#{_pago.fecha}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="Monto Pagado">
-                                <h:outputText value="#{_pago.montoPagado}" />
-                            </p:column>
-                            <p:column headerText="Saldo">
-                                <h:outputText value="#{_pago.saldo}" />
-                            </p:column>
-
-                        </p:dataTable>
-                        <p:separator/>
+                              hideEffect="explode" modal="true" >
+                        <h3>Pagar saldo pendiente</h3>
                         <h:panelGrid id="gridDatosPago"  columns="2">
                             <p:outputLabel value="Ultimo saldo:"/>
                             <p:inputText value="#{pagoBean.ultimoPago.saldo}" class="cajaTexto" readonly="true"/>
                             <p:outputLabel value="Monto a pagar:"/>
                             <p:inputText value="#{pagoBean.montoPagado}" class="cajaTexto">
                                 <p:ajax event="keyup" listener="#{pagoBean.calcularSaldo()}"
-                                    update=":formAdministrarParticipantes:txtSaldo" />
+                                    update=":formPagar:txtSaldo" />
                             </p:inputText>
                             <p:outputLabel value="Saldo:" /> 
                             <p:inputText id="txtSaldo" value="#{pagoBean.saldo}" class="cajaTexto"/>
                         </h:panelGrid>
                         <p:separator/>
-                        <p:commandButton value ="Guardar" actionListener="#{pagoBean.guardarPago()}" update=":formAdministrarParticipantes" oncomplete="PF('dialogPagar').hide();" />
+                        <p:commandButton value ="Guardar" actionListener="#{pagoBean.guardarPago()}" update="formAdministrarParticipantes" oncomplete="PF('dialogPagar').hide();" />
                         <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('dialogPagar').hide();" />
                     </p:dialog>
-                    
                 </h:form>
-                
             </ui:define>
 
         </ui:composition>

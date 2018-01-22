@@ -251,4 +251,12 @@ public class ParticipanteBean implements Serializable {
        participanteContrato.ModificarParticipante(participante);
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Persona modificada correctamente"));
     }
+    
+    public void desactivarParticipante(){
+        ParticipanteContrato participanteContrato = new Participante();
+        participanteContrato.DesactivarParticipante(participante);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Correcto", "Persona eliminada correctamente"));    
+        listaParticipantes = new ArrayList<>();
+        listaFiltradaParticipantes = new ArrayList<>();
+    }
 }

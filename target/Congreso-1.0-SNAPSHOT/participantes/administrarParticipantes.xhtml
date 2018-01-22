@@ -15,7 +15,7 @@
                     <p:growl id="mensajeGeneral" showDetail="true" autoUpdate="true" life="3000" />
 
                     <p:dataTable id="tablaParticipantes" paginator="true" paginatorPosition="top" 
-                                 var="_participante" value="#{participanteBean.listaCompletaParticipantes}" emptyMessage="No hay datos de participantes" rows="15" widgetVar=""  filteredValue="#{participanteBean.listaFiltradaCompletaParticipantes}">
+                                 var="_participante" value="#{participanteBean.listaParticipantes}" emptyMessage="No hay datos de participantes" rows="15" widgetVar=""  filteredValue="#{participanteBean.listaFiltradaParticipantes}">
                         <p:column headerText="Ci" filterBy="#{_participante.ci}" filterMatchMode="contains">
                             <h:outputText value="#{_participante.ci}" />
                         </p:column>
@@ -37,9 +37,6 @@
                         <p:column headerText="Institución" filterBy="#{_participante.institucion}" filterMatchMode="contains">
                             <h:outputText value="#{_participante.institucion}" />
                         </p:column>
-                        <p:column headerText="Es eliminado" >
-                            <p:selectBooleanCheckbox value="#{_participante.esEliminado}" />
-                        </p:column>
                         <p:column headerText="Modificar">
                             <p:commandButton value="Modificar" oncomplete="PF('dialogModificarParticipante').show();" update="formModificarParticipante">
                                 <f:setPropertyActionListener target="#{participanteBean.participante}" value="#{_participante}"/>
@@ -47,10 +44,9 @@
 
                         </p:column>
                         <p:column headerText="Eliminar">
-                            <p:commandButton value="Eliminar" oncomplete="PF('dialogModificarParticipante').show();" update="formModificarParticipante">
+                            <p:commandButton value="Eliminar" oncomplete="PF('dialogEliminarParticipante').show();" update="formEliminarParticipante">
                                 <f:setPropertyActionListener target="#{participanteBean.participante}" value="#{_participante}"/>
                             </p:commandButton>
-
                         </p:column>
                     </p:dataTable>
                 </h:form>
@@ -79,6 +75,15 @@
                         <p:commandButton value="Guardar" actionListener="#{participanteBean.modificarParticipante()}" update=":formAdministrarParticipantes:tablaParticipantes" 
                                          oncomplete="PF('dialogModificarParticipante').hide()" />
                         <p:commandButton value="Cancelar" immediate="true" oncomplete="PF('dialogModificarParticipante').hide();" />
+                    </p:dialog>
+                </h:form>
+                <h:form id="formEliminarParticipante" >
+                    <p:dialog id="dlgEliminarParticipante" widgetVar="dialogEliminarParticipante" resizable="false" showEffect="explode" 
+                              hideEffect="explode" modal="true" header="Eliminar Participante">
+                        <h:outputText value="Esta seguro de eliminar al participante? " />
+                        <p:commandButton value="Si" actionListener="#{participanteBean.desactivarParticipante()}" update="formAdministrarParticipantes" 
+                                         oncomplete="PF('dialogEliminarParticipante').hide()" />
+                        <p:commandButton value="No" immediate="true" oncomplete="PF('dialogEliminarParticipante').hide();" />
                     </p:dialog>
                 </h:form>
             </ui:define>

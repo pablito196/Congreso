@@ -88,7 +88,14 @@ public class EventoParticipanteBean implements Serializable{
         PdfPrint imprimirPdf = new PdfPrint();
         
         List<EventoParticipantePago> participantesEvento = new ArrayList<>();
-        participantesEvento = this.listaFiltradaParticipantesEvento;
+        if(listaFiltradaParticipantesEvento == null)
+        {
+            participantesEvento = listaParticipantesEvento;
+        }
+        else
+        {
+            participantesEvento = this.listaFiltradaParticipantesEvento;
+        }
         String filename = "ListaParticipantesEvento.pdf";
         String JasperPath = "resources/reportes/ListaParticipantes.jasper";
         imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);
@@ -98,7 +105,14 @@ public class EventoParticipanteBean implements Serializable{
         PdfPrint imprimirPdf = new PdfPrint();
         
         List<EventoParticipantePago> participantesEvento = new ArrayList<>();
-        participantesEvento = this.listaFiltradaParticipantesFaltaPago;
+        if(listaFiltradaParticipantesEvento == null)
+        {
+            participantesEvento = listaParticipantesFaltaPago;
+        }
+        else
+        {
+            participantesEvento = this.listaFiltradaParticipantesEvento;
+        }
         String filename = "ListaParticipantesDeudores.pdf";
         String JasperPath = "resources/reportes/ListaParticipantesFaltaPago.jasper";
         imprimirPdf.PDF(null, JasperPath, participantesEvento, filename);

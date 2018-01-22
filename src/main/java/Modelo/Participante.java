@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Participante implements ParticipanteContrato{
+public class Participante implements ParticipanteContrato {
 
     private int idParticipante;
     private String ci;
@@ -18,15 +18,14 @@ public class Participante implements ParticipanteContrato{
     private String institucion;
     private String telefono;
     private boolean esEliminado;
-    
-    
+
     private final Conexion con = new Conexion();
     private List<Parametros> parametros;
 
     public Participante() {
     }
 
-    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion, 
+    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion,
             String institucion, String telefono) {
         this.idParticipante = idParticipante;
         this.ci = ci;
@@ -36,10 +35,10 @@ public class Participante implements ParticipanteContrato{
         this.direccion = direccion;
         this.institucion = institucion;
         this.telefono = telefono;
-        
-        
+
     }
-    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion, 
+
+    public Participante(int idParticipante, String ci, String nombreParticipante, String ciudad, String correoElectronico, String direccion,
             String institucion, String telefono, boolean esEliminado) {
         this.idParticipante = idParticipante;
         this.ci = ci;
@@ -50,7 +49,7 @@ public class Participante implements ParticipanteContrato{
         this.institucion = institucion;
         this.telefono = telefono;
         this.esEliminado = esEliminado;
-        
+
     }
 
     public int getIdParticipante() {
@@ -125,51 +124,50 @@ public class Participante implements ParticipanteContrato{
         this.esEliminado = esEliminado;
     }
 
-      
     @Override
     public int GuardarParticipante(Participante participante) {
         int id = 0;
-       // System.out.println("entra a guardar modelo hoja ruta");
+        // System.out.println("entra a guardar modelo hoja ruta");
         parametros = new ArrayList<>();
-        parametros.add(new Parametros("_Ci",participante.ci));
-        parametros.add(new Parametros("_NombreParticipante",participante.nombreParticipante));
-        parametros.add(new Parametros("_Ciudad",participante.ciudad));
-        parametros.add(new Parametros("_CorreoElectronico",participante.correoElectronico));
-        parametros.add(new Parametros("_Direccion",participante.direccion));
-        parametros.add(new Parametros("_Institucion",participante.institucion));
-        parametros.add(new Parametros("_Telefono",participante.telefono));
-        
+        parametros.add(new Parametros("_Ci", participante.ci));
+        parametros.add(new Parametros("_NombreParticipante", participante.nombreParticipante));
+        parametros.add(new Parametros("_Ciudad", participante.ciudad));
+        parametros.add(new Parametros("_CorreoElectronico", participante.correoElectronico));
+        parametros.add(new Parametros("_Direccion", participante.direccion));
+        parametros.add(new Parametros("_Institucion", participante.institucion));
+        parametros.add(new Parametros("_Telefono", participante.telefono));
+
         //Object objectHojaRuta = con.PedirEscalar("PaInsertarHojaRuta", parametros, "IdHojaRuta");
         Object objectHojaRuta = con.PedirEscalar("PaInsertarParticipante", parametros);
         /*ResultSet hojasRuta = con.Listar("PaInsertarHojaRuta",parametros);
-        try {
-            while(hojasRuta.next())
-            {
-                id = Integer.parseInt(hojasRuta.getObject(1).toString());
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(HojaRuta.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+         try {
+         while(hojasRuta.next())
+         {
+         id = Integer.parseInt(hojasRuta.getObject(1).toString());
+         }
+         } catch (SQLException ex) {
+         Logger.getLogger(HojaRuta.class.getName()).log(Level.SEVERE, null, ex);
+         }*/
         //Object objectHojaRuta = con.PedirEscalar("PaInsertarHojaRuta", parametros);
         id = Integer.parseInt(objectHojaRuta.toString());
-       // System.out.println("idHojaRutaNueva: "+id);
+        // System.out.println("idHojaRutaNueva: "+id);
         return id;
         //con.Ejecutar("PaInsertarHojaRuta", parametros);
     }
 
     @Override
     public List<Participante> ListarParticipantes() {
-        
+
         ResultSet listadoParticipantes = con.Listar("PaListarParticipantes");
 
         ArrayList<Participante> listaParticipantes = new ArrayList<Participante>();
         try {
             while (listadoParticipantes.next()) {
 
-                listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"), 
-                                                        listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"), 
-                                                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono"),listadoParticipantes.getBoolean("EsEliminado")));
-                
+                listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"),
+                        listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"),
+                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono"), listadoParticipantes.getBoolean("EsEliminado")));
+
             }
         } catch (Exception e) {
             System.err.println(e);
@@ -181,23 +179,19 @@ public class Participante implements ParticipanteContrato{
     public Participante BuscarParticipante(String ciParticipante) {
         Participante _participante = null;
         parametros = new ArrayList<>();
-        parametros.add(new Parametros("_Ci",ciParticipante));
-        ResultSet datosParticipante = con.Listar("PaBuscarParticipante", parametros); 
-        try
-        {
-            while(datosParticipante.next())
-            {
-                _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"), 
-                                                datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"), 
-                                                datosParticipante.getString("Institucion"), telefono);
-                
+        parametros.add(new Parametros("_Ci", ciParticipante));
+        ResultSet datosParticipante = con.Listar("PaBuscarParticipante", parametros);
+        try {
+            while (datosParticipante.next()) {
+                _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"),
+                        datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"),
+                        datosParticipante.getString("Institucion"), telefono);
+
             }
-            
-        }
-        catch(Exception e)
-        {
+
+        } catch (Exception e) {
             System.err.println(e);
-        }        
+        }
         return _participante;
     }
 
@@ -205,23 +199,19 @@ public class Participante implements ParticipanteContrato{
     public Participante Buscar(String ci) {
         Participante _participante = null;
         parametros = new ArrayList<>();
-        parametros.add(new Parametros("_Ci",ci));
-        ResultSet datosParticipante = con.Listar("PaBuscarParticipante", parametros); 
-        try
-        {
-            while(datosParticipante.next())
-            {
-                _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"), 
-                                                datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"), 
-                                                datosParticipante.getString("Institucion"), datosParticipante.getString("Telefono"));
-                
+        parametros.add(new Parametros("_Ci", ci));
+        ResultSet datosParticipante = con.Listar("PaBuscarParticipante", parametros);
+        try {
+            while (datosParticipante.next()) {
+                _participante = new Participante(datosParticipante.getInt("IdParticipante"), datosParticipante.getString("CI"), datosParticipante.getString("NombreParticipante"),
+                        datosParticipante.getString("Ciudad"), datosParticipante.getString("CorreoElectronico"), datosParticipante.getString("Direccion"),
+                        datosParticipante.getString("Institucion"), datosParticipante.getString("Telefono"));
+
             }
-            
-        }
-        catch(Exception e)
-        {
+
+        } catch (Exception e) {
             System.err.println(e);
-        }        
+        }
         return _participante;
     }
 
@@ -233,10 +223,10 @@ public class Participante implements ParticipanteContrato{
         try {
             while (listadoParticipantes.next()) {
 
-                listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"), 
-                                                        listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"), 
-                                                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono")));
-                
+                listaParticipantes.add(new Participante(listadoParticipantes.getInt("IdParticipante"), listadoParticipantes.getString("CI"), listadoParticipantes.getString("NombreParticipante"),
+                        listadoParticipantes.getString("Ciudad"), listadoParticipantes.getString("CorreoElectronico"), listadoParticipantes.getString("Direccion"),
+                        listadoParticipantes.getString("Institucion"), listadoParticipantes.getString("Telefono")));
+
             }
         } catch (Exception e) {
             System.err.println(e);
@@ -247,15 +237,29 @@ public class Participante implements ParticipanteContrato{
     @Override
     public void ModificarParticipante(Participante participante) {
         parametros = new ArrayList<>();
-        parametros.add(new Parametros("_IdParticipante",participante.idParticipante));
-        parametros.add(new Parametros("_Ci",participante.ci));
-        parametros.add(new Parametros("_NombreParticipante",participante.nombreParticipante));
-        parametros.add(new Parametros("_Ciudad",participante.ciudad));
-        parametros.add(new Parametros("_CorreoElectronico",participante.correoElectronico));
-        parametros.add(new Parametros("_Direccion",participante.direccion));
-        parametros.add(new Parametros("_Institucion",participante.institucion));
-        parametros.add(new Parametros("_Telefono",participante.telefono));
+        parametros.add(new Parametros("_IdParticipante", participante.idParticipante));
+        parametros.add(new Parametros("_Ci", participante.ci));
+        parametros.add(new Parametros("_NombreParticipante", participante.nombreParticipante));
+        parametros.add(new Parametros("_Ciudad", participante.ciudad));
+        parametros.add(new Parametros("_CorreoElectronico", participante.correoElectronico));
+        parametros.add(new Parametros("_Direccion", participante.direccion));
+        parametros.add(new Parametros("_Institucion", participante.institucion));
+        parametros.add(new Parametros("_Telefono", participante.telefono));
         con.Ejecutar("PaModificarParticipante", parametros);
     }
-    
+
+    @Override
+    public void ActivarParticipante(Participante participante) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdParticipante", participante.getIdParticipante()));
+        con.Ejecutar("PaActivarParticipante", parametros);
+    }
+
+    @Override
+    public void DesactivarParticipante(Participante participante) {
+        parametros = new ArrayList<>();
+        parametros.add(new Parametros("_IdParticipante", participante.getIdParticipante()));
+        con.Ejecutar("PaDesactivarParticipante", parametros);
+    }
+
 }

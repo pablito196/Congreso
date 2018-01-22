@@ -51,11 +51,11 @@
 	<title>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="278" y="37" width="197" height="20"/>
+				<reportElement x="178" y="37" width="408" height="20"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[LISTA DE PARTICIPANTES]]></text>
+				<text><![CDATA[LISTA DE PARTICIPANTES CON PAGO DE EVENTO PENDIENTE]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -178,24 +178,27 @@
 		</band>
 	</pageFooter>
 	<summary>
-		<band height="24" splitType="Stretch">
+		<band height="39" splitType="Stretch">
 			<textField>
-				<reportElement x="542" y="4" width="69" height="15"/>
+				<reportElement x="545" y="8" width="69" height="15"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{montoPagado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="627" y="4" width="82" height="15"/>
+				<reportElement x="630" y="8" width="82" height="15"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{saldo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="475" y="2" width="54" height="20"/>
+				<reportElement x="466" y="6" width="66" height="20"/>
 				<textElement>
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[TOTAL:]]></text>
+				<text><![CDATA[TOTALES:]]></text>
 			</staticText>
+			<line>
+				<reportElement x="465" y="4" width="256" height="1"/>
+			</line>
 		</band>
 	</summary>
 </jasperReport>
